@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
+    <changeSet id="202201061553" author="Luis Filipe Guedes Mota">
+        <createTable tableName="municipios">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="municipios_id_pk" />
+            </column>
+            <column name="id_referencia" type="int">
+            </column>
+            <column name="codigo_ibge" type="int">
+            </column>
+            <column name="latitude" type="double">
+            </column>
+            <column name="longitude" type="double">
+            </column>
+            <column name="capital" type="boolean">
+            </column>
+            <column name="uf" type="varchar(2)">
+            </column>
+            <column name="ddd" type="int">
+            </column>
+        </createTable>
+
+        <createTable tableName="distancias">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="distancias_id_pk" />
+            </column>
+            <column name="id_municipio_origem" type="int">
+            </column>
+            <column name="id_municipio_destino" type="int">
+            </column>
+            <column name="minutos" type="double">
+            </column>
+            <column name="tempo_viagem" type="double">
+            </column>
+            <column name="milhas" type="double">
+            </column>
+            <column name="kilometros" type="double">
+            </column>
+            <column name="tempoAt" type="double">
+            </column>
+            <column name="tempo_andando" type="double">
+            </column>
+            <column name="tempo_caminhao" type="double">
+            </column>
+            <column name="tempo_viagem_caminhao" type="double">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
+
+
