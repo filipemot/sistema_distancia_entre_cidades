@@ -12,6 +12,17 @@ class FeaturesService:
         return out_src
 
     @staticmethod
+    def add_field_in_table(table_name, field_name, field_type):
+        arcpy.management.AddField(table_name, field_name, field_type)
+
+    @staticmethod
+    def add_computed_field(city, state, table, table_geodocde, workspace):
+        arcpy.conversion.TableToTable(table, workspace, "table_geocode")
+        arcpy.management.CalculateField(table_geodocde, "endereco_completo",
+                                        f"concatenarEndereco(!Endereco!, \"{city}\",\"{state}\")",
+                                        "PYTHON3", codeblockaddress, "TEXT")
+
+    @staticmethod
     def remove_feature(feature_class):
         if arcpy.Exists(feature_class):
             arcpy.Delete_management(feature_class)
