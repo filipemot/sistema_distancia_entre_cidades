@@ -23,3 +23,23 @@ class FeaturesService:
     def remove_feature(feature_class):
         if arcpy.Exists(feature_class):
             arcpy.Delete_management(feature_class)
+
+    def find_all(self, table, fields):
+
+        results = []
+
+        with arcpy.da.SearchCursor(table, fields) as cursor:
+            for row in cursor:
+                results.append(self.read_row(row, fields))
+
+        return results
+
+    @staticmethod
+    def read_row(row, fields):
+
+        result = {}
+
+        for index, field in enumerate(fields):
+            result[field] = row[index]
+
+        return result
