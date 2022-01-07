@@ -1,5 +1,5 @@
 from typing import List
-import pandas as pd
+import pandas as pd  # type: ignore
 import arcpy  # type: ignore
 
 

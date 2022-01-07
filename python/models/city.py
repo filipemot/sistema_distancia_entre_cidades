@@ -1,7 +1,7 @@
 from typing import List
 
-import arcpy
-import pandas as pd
+import arcpy  # type: ignore
+import pandas as pd  # type: ignore
 
 from models.models_base import ModelsBase
 from models.state import State
@@ -14,7 +14,7 @@ class City(ModelsBase):
     def __init__(self, folder_path: str, file_name: str, state: State) -> None:
         super().__init__(folder_path, file_name)
         self.state: State = state
-        self.table_city: str = None
+        self.table_city: str = ''
         self._list_values: pd.DataFrame = None
         self.prepare_data()
 

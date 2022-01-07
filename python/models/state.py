@@ -1,6 +1,6 @@
 from typing import List
 
-import pandas as pd
+import pandas as pd  # type: ignore
 
 from models.models_base import ModelsBase
 from utils.constants import FEATURE_STATE, SHEET_NAME_STATE, STATE_FIELD_UF, STATE_FIELD_ID
@@ -32,7 +32,7 @@ class State(ModelsBase):
 
     def prepare_data(self) -> None:
         self.create_table()
-        self._list_values: List[dict] = self.features_service.find_all(self._table_state,
+        self._list_values = self.features_service.find_all(self._table_state,
                                                                        [STATE_FIELD_ID, STATE_FIELD_UF])
 
     def create_table(self) -> None:
