@@ -13,6 +13,30 @@ class FeaturesService:
 
         return out_src
 
+    def find_all(self, table: str, fields: List[str]) -> pd.DataFrame:
+
+        results: List[dict] = []
+
+        with arcpy.da.SearchCursor(table, fields) as cursor:
+            for row in cursor:
+                results.append(self.read_row(row, fields))
+
+        return pd.DataFrame(results)
+
+    @staticmethod
+    def update_values(table: str, fields: List[str]) -> arcpy.da.UpdateCursor:
+        return arcpy.da.UpdateCursor(table, fields)
+
+    @staticmethod
+    def read_row(row: dict, fields: List[str]) -> dict:
+
+        result: dict = {}
+
+        for index, field in enumerate(fields):
+            result[field] = row[index]
+
+        return result
+
     @staticmethod
     def add_field_in_table(table_name: str, field_name: str, field_type: str) -> None:
         arcpy.management.AddField(table_name, field_name, field_type)
@@ -25,23 +49,3 @@ class FeaturesService:
     def remove_feature(feature_class: str):
         if arcpy.Exists(feature_class):
             arcpy.Delete_management(feature_class)
-
-    def find_all(self, table: str, fields: List[str]) -> pd.DataFrame:
-
-        results: List[dict] = []
-
-        with arcpy.da.SearchCursor(table, fields) as cursor:
-            for row in cursor:
-                results.append(self.read_row(row, fields))
-
-        return pd.DataFrame(results)
-
-    @staticmethod
-    def read_row(row: dict, fields: List[str]) -> dict:
-
-        result: dict = {}
-
-        for index, field in enumerate(fields):
-            result[field] = row[index]
-
-        return result
