@@ -16,11 +16,8 @@ class FeaturesService:
         arcpy.management.AddField(table_name, field_name, field_type)
 
     @staticmethod
-    def add_computed_field(city, state, table, table_geodocde, workspace):
-        arcpy.conversion.TableToTable(table, workspace, "table_geocode")
-        arcpy.management.CalculateField(table_geodocde, "endereco_completo",
-                                        f"concatenarEndereco(!Endereco!, \"{city}\",\"{state}\")",
-                                        "PYTHON3", codeblockaddress, "TEXT")
+    def add_computed_field(table, field_name, expression):
+        arcpy.management.CalculateField(table, field_name, expression)
 
     @staticmethod
     def remove_feature(feature_class):
