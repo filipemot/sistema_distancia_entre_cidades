@@ -1,5 +1,6 @@
 from typing import List
 
+import arcpy
 import pandas as pd
 
 from models.models_base import ModelsBase
@@ -31,8 +32,8 @@ class City(ModelsBase):
         self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, '!OBJECTID!')
         self.save_field_state()
 
-    def save_field_state(self):
-        cursor = self.features_service.update_values(self.table_city, [FIELD_CITY_ID_STATE, FIELD_STATE])
+    def save_field_state(self) -> None:
+        cursor: arcpy.da.UpdateCursor = self.features_service.update_values(self.table_city, [FIELD_CITY_ID_STATE, FIELD_STATE])
         for row in cursor:
             state_row = self.state.list_values.loc[self.state.list_values[STATE_FIELD_ID] == row[0]]
             row[1] = state_row[STATE_FIELD_UF].values[0]
