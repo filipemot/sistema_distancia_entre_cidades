@@ -4,6 +4,7 @@ import arcpy  # type: ignore
 
 
 class FeaturesService:
+    SR = arcpy.SpatialReference(4326)
 
     def excel_to_table(self, excel_path: str, workspace: str, table_name: str, excel_sheet_name: str) -> str:
         out_src: str = workspace + "/" + table_name
@@ -22,6 +23,13 @@ class FeaturesService:
                 results.append(self.read_row(row, fields))
 
         return pd.DataFrame(results)
+
+    def convert_table_to_point(self, table, output_feature_class, x_field, y_field):
+
+        self.remove_feature(output_feature_class)
+
+        arcpy.management.XYTableToPoint(table, output_feature_class, x_field=x_field, y_field=y_field,
+                                        coordinate_system=self.SR)
 
     @staticmethod
     def update_values(table: str, fields: List[str]) -> arcpy.da.UpdateCursor:

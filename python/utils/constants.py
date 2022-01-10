@@ -1,8 +1,11 @@
 FEATURE_CITY = 'city'
+FEATURE_CITY_POINT = 'city_geo'
 SHEET_NAME_CITY = 'municipios'
 FIELD_STATE = 'state'
 FIELD_CITY_ID = 'Id'
 FIELD_CITY_ID_STATE = 'Column6'
+FIELD_CITY_LAT = 'Column3'
+FIELD_CITY_LNG = 'Column4'
 
 FEATURE_STATE = 'state'
 SHEET_NAME_STATE = 'estados'
