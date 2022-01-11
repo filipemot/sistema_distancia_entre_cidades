@@ -37,12 +37,15 @@ class City(ModelsBase):
             cursor.updateRow(row)
         del cursor
 
-    def prepare_data(self) -> None:
-        self.create_table()
+    def add_fields_in_table(self):
         self.features_service.add_field_in_table(self.table_city, FIELD_STATE, 'Text')
         self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, '!OBJECTID!', 'Text')
         self.features_service.add_computed_field(self.table_city, 'X', f'float(!{FIELD_CITY_LNG_STR}!)', 'DOUBLE')
         self.features_service.add_computed_field(self.table_city, 'Y', f'float(!{FIELD_CITY_LAT_STR}!)', 'DOUBLE')
+
+    def prepare_data(self) -> None:
+        self.create_table()
+        self.add_fields_in_table()
         self.save_field_state()
         self.features_service.convert_table_to_point(self.table_city, self.table_city_geo,
                                                      FIELD_CITY_LAT, FIELD_CITY_LNG)
