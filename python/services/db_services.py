@@ -25,5 +25,8 @@ class DbServices:
         if self.conn is not None:
             self.conn.close()
 
+    def commit(self):
+        self.conn.commit()
+
     def __del__(self) -> None:
         self.close_connection()

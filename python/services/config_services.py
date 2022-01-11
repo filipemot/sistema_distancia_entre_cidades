@@ -1,8 +1,11 @@
 import logging
+import os
+import sys
 from configparser import ConfigParser
 
 
-def config(filename='database.ini', section='postgresql') -> dict:
+def config(filename= os.path.dirname(sys.modules['__main__'].__file__) + '\\database.ini',
+           section='postgresql') -> dict:
     parser: ConfigParser = ConfigParser()
     parser.read(filename)
 

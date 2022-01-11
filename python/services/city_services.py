@@ -3,11 +3,14 @@ from typing import List
 import arcpy  # type: ignore
 import pandas as pd  # type: ignore
 
+from models.city import City
 from services.base_services import BaseServices
+from services.city_db_services import CityDbServices
 from services.state_services import StateServices
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
-    FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT
+    FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT, FIELD_CITY_NAME, FIELD_CITY_CODE_IBGE, \
+    FIELD_CITY_CAPITAL, FIELD_CITY_PHONE_NUMBER
 
 
 class CityServices(BaseServices):
@@ -15,6 +18,7 @@ class CityServices(BaseServices):
     def __init__(self, folder_path: str, file_name: str, state: StateServices) -> None:
         super().__init__(folder_path, file_name)
         self.state: StateServices = state
+        self.city_db_services = CityDbServices()
         self.table_city: str = ''
         self._list_values: pd.DataFrame = pd.DataFrame()
         self.table_city_geo = self.configs['workspace'] + "\\" + FEATURE_CITY_POINT
@@ -51,6 +55,23 @@ class CityServices(BaseServices):
         self.save_field_state()
         self.features_service.convert_table_to_point(self.table_city, self.table_city_geo,
                                                      FIELD_CITY_LAT, FIELD_CITY_LNG)
+        list_city_features = self.features_service.find_all(self.table_city_geo, [FIELD_CITY_NAME, FIELD_CITY_ID,
+                                                                                  FIELD_CITY_CODE_IBGE, FIELD_CITY_LAT,
+                                                                                  FIELD_CITY_LNG, FIELD_CITY_CAPITAL,
+                                                                                  FIELD_STATE, FIELD_CITY_PHONE_NUMBER])
+        list_cities = self.convert_feature_to_cities(list_city_features)
+        self.city_db_services.delete_all_cities()
+        self.city_db_services.insert_cities(list_cities)
+
+    @staticmethod
+    def convert_feature_to_cities(list_city_features: pd.DataFrame) -> List[City]:
+
+        list_cities: List[City] = []
+
+        for item in list_city_features.values.tolist():
+            list_cities.append(City(item[0], int(item[1]), int(item[2]), item[3], item[4], item[5], item[6], item[7]))
+
+        return list_cities
 
     def create_table(self) -> None:
         self.table_city = self.features_service.excel_to_table(
