@@ -50,8 +50,8 @@ class FeaturesService:
         arcpy.management.AddField(table_name, field_name, field_type)
 
     @staticmethod
-    def add_computed_field(table: str, field_name: str, expression: str) -> None:
-        arcpy.management.CalculateField(table, field_name, expression)
+    def add_computed_field(table: str, field_name: str, expression: str, field_type: str) -> None:
+        arcpy.management.CalculateField(table, field_name, expression, field_type=field_type)
 
     @staticmethod
     def remove_feature(feature_class: str):

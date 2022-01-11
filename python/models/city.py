@@ -6,7 +6,8 @@ import pandas as pd  # type: ignore
 from models.models_base import ModelsBase
 from models.state import State
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
-    STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG
+    STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
+    FIELD_CITY_LAT_STR
 
 
 class City(ModelsBase):
@@ -39,10 +40,12 @@ class City(ModelsBase):
     def prepare_data(self) -> None:
         self.create_table()
         self.features_service.add_field_in_table(self.table_city, FIELD_STATE, 'Text')
-        self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, '!OBJECTID!')
+        self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, '!OBJECTID!', 'Text')
+        self.features_service.add_computed_field(self.table_city, 'X', f'float(!{FIELD_CITY_LNG_STR}!)', 'DOUBLE')
+        self.features_service.add_computed_field(self.table_city, 'Y', f'float(!{FIELD_CITY_LAT_STR}!)', 'DOUBLE')
         self.save_field_state()
         self.features_service.convert_table_to_point(self.table_city, self.table_city_geo,
-                                                      FIELD_CITY_LAT, FIELD_CITY_LNG)
+                                                     FIELD_CITY_LAT, FIELD_CITY_LNG)
 
     def create_table(self) -> None:
         self.table_city = self.features_service.excel_to_table(

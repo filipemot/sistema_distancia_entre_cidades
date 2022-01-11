@@ -4,6 +4,8 @@ SHEET_NAME_CITY = 'municipios'
 FIELD_STATE = 'state'
 FIELD_CITY_ID = 'Id'
 FIELD_CITY_ID_STATE = 'Column6'
+FIELD_CITY_LAT_STR = 'Column3'
+FIELD_CITY_LNG_STR = 'Column4'
 FIELD_CITY_LAT = 'Column3'
 FIELD_CITY_LNG = 'Column4'
 
