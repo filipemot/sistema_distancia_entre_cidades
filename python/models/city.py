@@ -7,7 +7,7 @@ from models.models_base import ModelsBase
 from models.state import State
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
-    FIELD_CITY_LAT_STR
+    FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT
 
 
 class City(ModelsBase):
@@ -16,7 +16,7 @@ class City(ModelsBase):
         super().__init__(folder_path, file_name)
         self.state: State = state
         self.table_city: str = ''
-        self._list_values: pd.DataFrame = None
+        self._list_values: pd.DataFrame = pd.DataFrame()
         self.table_city_geo = self.configs['workspace'] + "\\" + FEATURE_CITY_POINT
         self.prepare_data()
 
@@ -38,10 +38,12 @@ class City(ModelsBase):
         del cursor
 
     def add_fields_in_table(self):
-        self.features_service.add_field_in_table(self.table_city, FIELD_STATE, 'Text')
-        self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, '!OBJECTID!', 'Text')
-        self.features_service.add_computed_field(self.table_city, 'X', f'float(!{FIELD_CITY_LNG_STR}!)', 'DOUBLE')
-        self.features_service.add_computed_field(self.table_city, 'Y', f'float(!{FIELD_CITY_LAT_STR}!)', 'DOUBLE')
+        self.features_service.add_field_in_table(self.table_city, FIELD_STATE, TYPE_TEXT)
+        self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, f'!{FIELD_CITY_OBJECT_ID}!', TYPE_TEXT)
+        self.features_service.add_computed_field(self.table_city, f'{FIELD_CITY_LAT}',
+                                                 f'{TYPE_FLOAT}(!{FIELD_CITY_LNG_STR}!)', TYPE_DOUBLE)
+        self.features_service.add_computed_field(self.table_city, f'{FIELD_CITY_LNG}',
+                                                 f'{TYPE_FLOAT}(!{FIELD_CITY_LAT_STR}!)', TYPE_DOUBLE)
 
     def prepare_data(self) -> None:
         self.create_table()
