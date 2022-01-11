@@ -10,5 +10,6 @@ def main():
     city_services: CityServices = CityServices(os.path.dirname(os.path.abspath(__file__)), "config.json",
                                                state_services)
 
+
 if __name__ == '__main__':
     main()

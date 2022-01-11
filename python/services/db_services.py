@@ -5,7 +5,7 @@ import psycopg2  # type: ignore
 from services.config_services import config
 
 
-class Db_Services:
+class DbServices:
 
     def __init__(self):
         self.conn = None

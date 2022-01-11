@@ -2,11 +2,11 @@ from typing import List
 
 import pandas as pd  # type: ignore
 
-from services.base_services import ServicesBase
+from services.base_services import BaseServices
 from utils.constants import FEATURE_STATE, SHEET_NAME_STATE, STATE_FIELD_UF, STATE_FIELD_ID
 
 
-class StateServices(ServicesBase):
+class StateServices(BaseServices):
 
     def __init__(self, folder_path: str, file_name: str) -> None:
         super().__init__(folder_path, file_name)

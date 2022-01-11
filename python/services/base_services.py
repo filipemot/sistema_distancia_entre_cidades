@@ -4,7 +4,7 @@ from services.configs_service import ConfigsService
 from services.features_service import FeaturesService
 
 
-class ServicesBase(metaclass=abc.ABCMeta):
+class BaseServices(metaclass=abc.ABCMeta):
 
     def __init__(self, folder_path: str, file_name: str) -> None:
         self.config_service: ConfigsService = ConfigsService(folder_path, file_name)

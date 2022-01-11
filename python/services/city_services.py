@@ -3,14 +3,14 @@ from typing import List
 import arcpy  # type: ignore
 import pandas as pd  # type: ignore
 
-from services.base_services import ServicesBase
+from services.base_services import BaseServices
 from services.state_services import StateServices
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
     FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT
 
 
-class CityServices(ServicesBase):
+class CityServices(BaseServices):
 
     def __init__(self, folder_path: str, file_name: str, state: StateServices) -> None:
         super().__init__(folder_path, file_name)
