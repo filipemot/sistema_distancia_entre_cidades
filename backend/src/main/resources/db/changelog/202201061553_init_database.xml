@@ -13,6 +13,8 @@
             </column>
             <column name="id_referencia" type="int">
             </column>
+            <column name="nome" type="varchar(255)">
+            </column>
             <column name="codigo_ibge" type="int">
             </column>
             <column name="latitude" type="double">
