@@ -37,7 +37,7 @@ class CityServices(ServicesBase):
             cursor.updateRow(row)
         del cursor
 
-    def add_fields_in_table(self):
+    def add_fields_in_table(self) -> None:
         self.features_service.add_field_in_table(self.table_city, FIELD_STATE, TYPE_TEXT)
         self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, f'!{FIELD_CITY_OBJECT_ID}!', TYPE_TEXT)
         self.features_service.add_computed_field(self.table_city, f'{FIELD_CITY_LAT}',
