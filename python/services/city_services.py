@@ -3,18 +3,18 @@ from typing import List
 import arcpy  # type: ignore
 import pandas as pd  # type: ignore
 
-from models.models_base import ModelsBase
-from models.state import State
+from services.base_services import ServicesBase
+from services.state_services import StateServices
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
     FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT
 
 
-class City(ModelsBase):
+class CityServices(ServicesBase):
 
-    def __init__(self, folder_path: str, file_name: str, state: State) -> None:
+    def __init__(self, folder_path: str, file_name: str, state: StateServices) -> None:
         super().__init__(folder_path, file_name)
-        self.state: State = state
+        self.state: StateServices = state
         self.table_city: str = ''
         self._list_values: pd.DataFrame = pd.DataFrame()
         self.table_city_geo = self.configs['workspace'] + "\\" + FEATURE_CITY_POINT

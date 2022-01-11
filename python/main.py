@@ -1,13 +1,13 @@
 import os
 
-from models.city import City
-from models.state import State
+from services.city_services import CityServices
+from services.state_services import StateServices
 
 
 def main():
-    state = State(os.path.dirname(os.path.abspath(__file__)), "config.json")
+    state = StateServices(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
-    city = City(os.path.dirname(os.path.abspath(__file__)), "config.json", state)
+    city = CityServices(os.path.dirname(os.path.abspath(__file__)), "config.json", state)
 
 
 if __name__ == '__main__':
