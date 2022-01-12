@@ -1,14 +1,15 @@
 import os
 
-from services.city_services import CityServices
-from services.state_services import StateServices
+from services.city_service import CityService
+from services.state_service import StateService
 
 
 def main():
-    state_services: StateServices = StateServices(os.path.dirname(os.path.abspath(__file__)), "config.json")
+    state_services: StateService = StateService(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
-    city_services: CityServices = CityServices(os.path.dirname(os.path.abspath(__file__)), "config.json",
-                                              state_services)
+    city_services: CityService = CityService(os.path.dirname(os.path.abspath(__file__)), "config.json",
+                                             state_services)
+
 
 if __name__ == '__main__':
     main()

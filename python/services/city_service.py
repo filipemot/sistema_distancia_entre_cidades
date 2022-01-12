@@ -4,21 +4,21 @@ import arcpy  # type: ignore
 import pandas as pd  # type: ignore
 
 from models.city import City
-from services.base_services import BaseServices
-from services.city_db_services import CityDbServices
-from services.state_services import StateServices
+from services.base_service import BaseService
+from services.city_db_service import CityDbService
+from services.state_service import StateService
 from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CITY_ID, FIELD_CITY_ID_STATE, \
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
     FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT, FIELD_CITY_NAME, FIELD_CITY_CODE_IBGE, \
     FIELD_CITY_CAPITAL, FIELD_CITY_PHONE_NUMBER
 
 
-class CityServices(BaseServices):
+class CityService(BaseService):
 
-    def __init__(self, folder_path: str, file_name: str, state: StateServices) -> None:
+    def __init__(self, folder_path: str, file_name: str, state: StateService) -> None:
         super().__init__(folder_path, file_name)
-        self.state: StateServices = state
-        self.city_db_services = CityDbServices()
+        self.state: StateService = state
+        self.city_db_services = CityDbService()
         self.table_city: str = ''
         self._list_values: pd.DataFrame = pd.DataFrame()
         self.table_city_geo = self.configs['workspace'] + "\\" + FEATURE_CITY_POINT

@@ -2,18 +2,19 @@ import logging
 
 import psycopg2  # type: ignore
 
-from services.config_services import config
+from services.config_db_service import ConfigDbService
 
 
-class DbServices:
+class DbService:
 
     def __init__(self):
         self.conn = None
+        self.config_db_service = ConfigDbService()
         self.connect()
 
     def connect(self):
         try:
-            params = config()
+            params = self.config_db_service.config()
 
             self.conn = psycopg2.connect(**params)
 
