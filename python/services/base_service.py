@@ -15,9 +15,5 @@ class BaseService(metaclass=abc.ABCMeta):
         return self.config_service.data_config
 
     @abc.abstractmethod
-    def create_table(self) -> None:
-        ...
-
-    @abc.abstractmethod
     def prepare_data(self) -> None:
         ...
