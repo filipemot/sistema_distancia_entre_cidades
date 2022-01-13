@@ -48,7 +48,7 @@ class FeaturesService:
         arcpy.management.CalculateField(table, field_name, expression, field_type=field_type)
 
     @staticmethod
-    def remove_feature(feature_class: str):
+    def remove_feature(feature_class: str) -> None:
         if arcpy.Exists(feature_class):
             arcpy.Delete_management(feature_class)
 

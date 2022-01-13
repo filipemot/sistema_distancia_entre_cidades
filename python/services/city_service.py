@@ -22,7 +22,8 @@ class CityService(BaseService):
         self.table_city: str = ''
         self._list_values: pd.DataFrame = pd.DataFrame()
         self.table_city_geo = self.configs['workspace'] + "\\" + FEATURE_CITY_POINT
-        self.prepare_data()
+        if self.configs['execution']['clear_city'] == 1:
+            self.prepare_data()
 
     @property
     def list_values(self) -> pd.DataFrame:

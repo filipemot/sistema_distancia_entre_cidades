@@ -45,14 +45,15 @@ class DistanceService(BaseService):
         self.network_analysis_service.remove_dataset_matrix()
 
     def calculate_distances(self) -> None:
-        self.prepare_data()
-        self.layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
-        self.__location_origin()
-        self.__location_destination()
-        self.network_analysis_service.solve_matrix_distance(self.layer_cost,
-                                                            NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
-                                                            NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
-        self.feature_service.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
+        if self.configs['execution']['clear_distance'] == 1:
+            self.prepare_data()
+            self.layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
+            self.__location_origin()
+            self.__location_destination()
+            self.network_analysis_service.solve_matrix_distance(self.layer_cost,
+                                                                NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
+                                                                NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
+            self.feature_service.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
 
 
     def __location_origin(self) -> None:

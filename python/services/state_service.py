@@ -12,7 +12,8 @@ class StateService(BaseService):
         super().__init__(folder_path, file_name)
         self._table_state: str = ''
         self._list_values: pd.DataFrame = None
-        self.prepare_data()
+        if self.configs['execution']['clear_state'] == 1:
+            self.prepare_data()
 
     @property
     def table_state(self) -> str:
