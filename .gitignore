@@ -24,3 +24,6 @@ hs_err_pid*
 /arcgis_project
 /python/.idea
 /python/.mypy_cache
+/python/services/__pycache__
+/python/utils/__pycache__
+/python/models/__pycache__
