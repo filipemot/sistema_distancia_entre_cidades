@@ -1,4 +1,4 @@
-from arcpy import env
+from arcpy import env  # type: ignore
 
 from models.distance_matrix import DistanceMatrix
 from models.location import Location
@@ -52,7 +52,7 @@ class DistanceService(BaseService):
         self.network_analysis_service.solve_matrix_distance(self.layer_cost,
                                                             NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
                                                             NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
-        self.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
+        self.feature_service.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
 
 
     def __location_origin(self) -> None:
