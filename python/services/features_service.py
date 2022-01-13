@@ -32,6 +32,10 @@ class FeaturesService:
                                         coordinate_system=self.__SR)
 
     @staticmethod
+    def copy_features(in_feature: str, out_feature: str) -> None:
+        arcpy.management.CopyFeatures(in_feature, out_feature, '', None, None, None)
+
+    @staticmethod
     def update_values(table: str, fields: List[str]) -> arcpy.da.UpdateCursor:
         return arcpy.da.UpdateCursor(table, fields)
 

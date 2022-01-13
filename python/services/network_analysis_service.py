@@ -4,8 +4,8 @@ import arcpy  # type: ignore
 
 from models.distance_matrix import DistanceMatrix
 from models.location import Location
-from utils.constants import NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS, NETWORK_ANALYTICS_TERMINATE_ON_ERROR, \
-    NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS, NETWORK_ANALYTICS_LICENCE, LICENCE_AVAILABLE
+from utils.constants import NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS, NETWORK_ANALYTICS_LICENCE, \
+    LICENCE_AVAILABLE
 
 
 class NetworkAnalysisService:
@@ -52,11 +52,11 @@ class NetworkAnalysisService:
                               None)
 
     @staticmethod
-    def solve_matrix_distance(layer_matrix_name, simplification_tolerance):
+    def solve_matrix_distance(layer_matrix_name, ignore_invalid_locations, terminate_on_error):
         arcpy.na.Solve(layer_matrix_name,
-                       NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
-                       NETWORK_ANALYTICS_TERMINATE_ON_ERROR,
-                       simplification_tolerance,
+                       ignore_invalid_locations,
+                       terminate_on_error,
+                       None,
                        '')
 
     @staticmethod

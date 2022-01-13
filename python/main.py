@@ -13,6 +13,7 @@ def main():
 
     distance_services: DistanceService = DistanceService(os.path.dirname(os.path.abspath(__file__)), "config.json",
                                                          city_services)
+    distance_services.calculate_distances()
 
 
 if __name__ == '__main__':
