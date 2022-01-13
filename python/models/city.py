@@ -1,4 +1,4 @@
-import uuid
+import uuid  # type: ignore
 
 
 class City:
