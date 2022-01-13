@@ -17,9 +17,11 @@ class NetworkAnalysisService:
     def create_dataset_cost_matrix(distance_matrix: DistanceMatrix):
         cost_matrix_result = arcpy.na.MakeODCostMatrixAnalysisLayer(distance_matrix.layer_route,
                                                                     distance_matrix.layer_cost_name,
-                                                                    distance_matrix.travel_mode, None,
+                                                                    distance_matrix.travel_mode,
                                                                     None,
-                                                                    None, distance_matrix.time_zone,
+                                                                    None,
+                                                                    None,
+                                                                    distance_matrix.time_zone,
                                                                     distance_matrix.line_shape,
                                                                     distance_matrix.accumulate_attributes,
                                                                     distance_matrix.ignore_invalid_locations)
@@ -43,18 +45,27 @@ class NetworkAnalysisService:
 
     @staticmethod
     def add_locations(location: Location):
-        arcpy.na.AddLocations(location.layer_matrix_name, location.type_locations, location.source_layer,
+        arcpy.na.AddLocations(location.layer_matrix_name,
+                              location.type_locations,
+                              location.source_layer,
                               location.field_mapping,
-                              location.search_tolerance, None,
+                              location.search_tolerance,
+                              None,
                               location.search_criteria,
-                              location.find_closest, location.append_location, location.snap,
-                              location.snap_offset, location.exclude_restricted, None)
+                              location.find_closest,
+                              location.append_location,
+                              location.snap,
+                              location.snap_offset,
+                              location.exclude_restricted,
+                              None)
 
     @staticmethod
     def solve_matrix_distance(layer_matrix_name, simplification_tolerance):
         arcpy.na.Solve(layer_matrix_name,
                        NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
-                       NETWORK_ANALYTICS_TERMINATE_ON_ERROR, simplification_tolerance, '')
+                       NETWORK_ANALYTICS_TERMINATE_ON_ERROR,
+                       simplification_tolerance,
+                       '')
 
     @staticmethod
     def get_na_class(object_matrix_layer):
