@@ -1,4 +1,5 @@
 import logging
+import time
 
 import arcpy  # type: ignore
 
@@ -15,6 +16,7 @@ class NetworkAnalysisService:
 
     @staticmethod
     def create_dataset_cost_matrix(distance_matrix: DistanceMatrix):
+        initial = time.time()
         cost_matrix_result = arcpy.na.MakeODCostMatrixAnalysisLayer(distance_matrix.layer_route,
                                                                     distance_matrix.layer_cost_name,
                                                                     distance_matrix.travel_mode,
@@ -26,6 +28,8 @@ class NetworkAnalysisService:
                                                                     distance_matrix.accumulate_attributes,
                                                                     distance_matrix.ignore_invalid_locations)
 
+        ends = time.time()
+        print("create_dataset_cost_matrix:" + ends - initial)
         return cost_matrix_result
 
     @staticmethod
@@ -37,6 +41,7 @@ class NetworkAnalysisService:
 
     @staticmethod
     def add_locations(location: Location):
+        initial = time.time()
         arcpy.na.AddLocations(location.layer_matrix_name,
                               location.type_locations,
                               location.source_layer,
@@ -50,14 +55,19 @@ class NetworkAnalysisService:
                               location.snap_offset,
                               location.exclude_restricted,
                               None)
+        ends = time.time()
+        print("add_locations:" + ends - initial)
 
     @staticmethod
     def solve_matrix_distance(layer_matrix_name, ignore_invalid_locations, terminate_on_error):
+        initial = time.time()
         arcpy.na.Solve(layer_matrix_name,
                        ignore_invalid_locations,
                        terminate_on_error,
                        None,
                        '')
+        ends = time.time()
+        print("solve_matrix_distance:" + ends - initial)
 
     @staticmethod
     def __get_na_class(object_matrix_layer):

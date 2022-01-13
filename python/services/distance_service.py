@@ -1,3 +1,5 @@
+import time
+
 from arcpy import env  # type: ignore
 
 from models.distance_matrix import DistanceMatrix
@@ -41,8 +43,11 @@ class DistanceService(BaseService):
         self.distance_calculate_layer = self.configs['workspace'] + "\\" + DISTANCE_MATRIX_RESULTS_LAYER_NAME
 
     def prepare_data(self) -> None:
+        initial = time.time()
         self.distance_db_services.delete_all_distances()
         self.network_analysis_service.remove_dataset_matrix()
+        ends = time.time()
+        print("prepare_data:" + ends - initial)
 
     def calculate_distances(self) -> None:
         if self.configs['execution']['clear_distance'] == 1:

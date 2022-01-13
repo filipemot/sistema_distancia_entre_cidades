@@ -4,9 +4,9 @@
   "excel_states": "D:\\ProjetosPessoais\\sistema_distancia_entre_cidades\\python\\data\\Estados.xlsx",
   "route": "C:\\Esri\\Open Street Map\\Dados\\FGDB\\StreetMap_Data\\LatinAmerica.gdb\\Routing\\Routing_ND",
   "execution": {
-    "clear_state": 0,
-    "clear_city": 0,
-    "clear_distance": 0,
+    "clear_state": 1,
+    "clear_city": 1,
+    "clear_distance": 1,
     "save_distance": 1
   }
 }
