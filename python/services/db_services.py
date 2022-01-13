@@ -10,9 +10,9 @@ class DbService:
     def __init__(self):
         self.conn = None
         self.config_db_service = ConfigDbService()
-        self.connect()
+        self.__connect()
 
-    def connect(self):
+    def __connect(self):
         try:
             params = self.config_db_service.config()
 
@@ -22,12 +22,12 @@ class DbService:
             logging.error(error)
             self.conn = None
 
-    def close_connection(self) -> None:
-        if self.conn is not None:
-            self.conn.close()
-
     def commit(self):
         self.conn.commit()
 
+    def __close_connection(self) -> None:
+        if self.conn is not None:
+            self.conn.close()
+
     def __del__(self) -> None:
-        self.close_connection()
+        self.__close_connection()

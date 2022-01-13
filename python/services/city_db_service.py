@@ -27,14 +27,14 @@ class CityDbService:
               f'{FIELD_CITY_CODE_IBGE_POSTGREE}, {FIELD_CITY_LAT_POSTGREE}, {FIELD_CITY_LNG_POSTGREE}, ' \
               f'{FIELD_CITY_CAPITAL_POSTGREE}, {FIELD_CITY_STATE_POSTGREE}, {FIELD_CITY_CODE_PHONE_POSTGREE}) VALUES '
 
-        values = self.get_values_insert(city_list, cursor)
+        values = self.__get_values_insert(city_list, cursor)
 
         cursor.execute(f'{sql} {values}')
         self.db_services.commit()
         cursor.close()
 
     @staticmethod
-    def get_values_insert(city_list: List[City], cursor: psycopg2.extensions.cursor) -> str:
+    def __get_values_insert(city_list: List[City], cursor: psycopg2.extensions.cursor) -> str:
         tuple_values = []
 
         for city in city_list:

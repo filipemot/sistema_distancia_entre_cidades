@@ -11,7 +11,7 @@ from utils.constants import NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS, NETWORK_
 class NetworkAnalysisService:
 
     def __init__(self):
-        self.check_extension_network()
+        self.__check_extension_network()
 
     @staticmethod
     def create_dataset_cost_matrix(distance_matrix: DistanceMatrix):
@@ -34,14 +34,6 @@ class NetworkAnalysisService:
 
         for dataset in datasets:
             arcpy.Delete_management(dataset)
-
-    @staticmethod
-    def check_extension_network():
-        if arcpy.CheckExtension(NETWORK_ANALYTICS_LICENCE) == LICENCE_AVAILABLE:
-            arcpy.CheckOutExtension(NETWORK_ANALYTICS_LICENCE)
-        else:
-            logging.error("Network Analyst extension is not available.")
-            raise arcpy.ExecuteError("Network Analyst Extension license is not available.")
 
     @staticmethod
     def add_locations(location: Location):
@@ -68,7 +60,16 @@ class NetworkAnalysisService:
                        '')
 
     @staticmethod
-    def get_na_class(object_matrix_layer):
+    def __get_na_class(object_matrix_layer):
         layer_object = object_matrix_layer.getOutput(0)
 
         return arcpy.na.GetNAClassNames(layer_object)
+
+
+    @staticmethod
+    def __check_extension_network():
+        if arcpy.CheckExtension(NETWORK_ANALYTICS_LICENCE) == LICENCE_AVAILABLE:
+            arcpy.CheckOutExtension(NETWORK_ANALYTICS_LICENCE)
+        else:
+            logging.error("Network Analyst extension is not available.")
+            raise arcpy.ExecuteError("Network Analyst Extension license is not available.")

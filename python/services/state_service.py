@@ -31,11 +31,11 @@ class StateService(BaseService):
         self._list_values = list_values
 
     def prepare_data(self) -> None:
-        self.create_table()
+        self.__create_table()
         self._list_values = self.features_service.find_all(self._table_state,
                                                                        [STATE_FIELD_ID, STATE_FIELD_UF])
 
-    def create_table(self) -> None:
+    def __create_table(self) -> None:
         self._table_state = self.features_service.excel_to_table(
             self.configs['excel_states'],
             self.configs['workspace'],
