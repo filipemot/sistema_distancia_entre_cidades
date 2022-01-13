@@ -54,6 +54,7 @@ class DistanceService(BaseService):
                                                                 NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
                                                                 NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
             self.feature_service.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
+            self.network_analysis_service.remove_dataset_matrix()
 
 
     def __location_origin(self) -> None:
