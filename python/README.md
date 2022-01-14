@@ -71,3 +71,14 @@ No arquivo config.json, tem as informações configuráveis para execução
   }
 }
 ```
+
+**Configuração Banco de Dados**
+
+No arquivo database.ini, tem as informações de configuração com o Banco de Dados:
+
+[postgresql]
+host = localhost
+database = distanciaentrecidades
+user = postgres
+password = postgres
+port = 5434
