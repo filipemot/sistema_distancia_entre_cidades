@@ -87,3 +87,56 @@ user = postgres
 password = postgres
 
 port = 5434
+
+**Tabelas**
+
+As tabelas do banco de dados são geradas pelo projeto do backend. Mas se precisar segue os scripts para criação das tabelas:
+
+```sql
+-- public.distancias definition
+
+-- Drop table
+
+-- DROP TABLE public.distancias;
+
+CREATE TABLE public.distancias (
+	id uuid NOT NULL,
+	id_municipio_origem int4 NULL,
+	id_municipio_destino int4 NULL,
+	minutos float8 NULL,
+	tempo_viagem float8 NULL,
+	milhas float8 NULL,
+	kilometros float8 NULL,
+	tempo_at float8 NULL,
+	tempo_andando float8 NULL,
+	tempo_caminhao float8 NULL,
+	tempo_viagem_caminhao float8 NULL,
+	CONSTRAINT distancias_id_pk PRIMARY KEY (id)
+);
+CREATE INDEX distancias_id_municipio_destino ON public.distancias USING btree (id_municipio_destino);
+CREATE INDEX distancias_id_municipio_origem ON public.distancias USING btree (id_municipio_origem);
+CREATE INDEX distancias_id_municipio_origem_id_municipio_destino ON public.distancias USING btree (id_municipio_origem, id_municipio_destino);
+```
+
+
+```sql
+-- public.municipios definition
+
+-- Drop table
+
+-- DROP TABLE public.municipios;
+
+CREATE TABLE public.municipios (
+	id uuid NOT NULL,
+	id_referencia int4 NULL,
+	nome varchar(255) NULL,
+	codigo_ibge int4 NULL,
+	latitude float8 NULL,
+	longitude float8 NULL,
+	capital bool NULL,
+	uf varchar(2) NULL,
+	ddd int4 NULL,
+	CONSTRAINT municipios_id_pk PRIMARY KEY (id)
+);
+```
+

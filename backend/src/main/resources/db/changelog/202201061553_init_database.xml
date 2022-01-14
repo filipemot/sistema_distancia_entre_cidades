@@ -45,7 +45,7 @@
             </column>
             <column name="kilometros" type="double">
             </column>
-            <column name="tempoAt" type="double">
+            <column name="tempo_at" type="double">
             </column>
             <column name="tempo_andando" type="double">
             </column>
@@ -54,6 +54,16 @@
             <column name="tempo_viagem_caminhao" type="double">
             </column>
         </createTable>
+        <createIndex indexName="distancias_id_municipio_origem_id_municipio_destino" tableName="distancias">
+            <column name="id_municipio_origem"/>
+            <column name="id_municipio_destino"/>
+        </createIndex>
+        <createIndex indexName="distancias_id_municipio_origem" tableName="distancias">
+            <column name="id_municipio_origem"/>
+        </createIndex>
+        <createIndex indexName="distancias_id_municipio_destino" tableName="distancias">
+            <column name="id_municipio_destino"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
 
