@@ -21,6 +21,7 @@ from utils.constants import DISTANCE_MATRIX_LAYER_NAME, DISTANCE_MATRIX_TRAVEL_M
     NETWORK_ANALYTICS_DESTINATION_SNAP, NETWORK_ANALYTICS_DESTINATION_SNAP_OFFSET, \
     NETWORK_ANALYTICS_DESTINATION_EXCLUDE_RESTRICTED, NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS, \
     NETWORK_ANALYTICS_TERMINATE_ON_ERROR, DISTANCE_MATRIX_RESULTS_LAYER_NAME
+from utils.timer_decorator import timer_decorator
 
 
 class DistanceService(BaseService):
@@ -42,12 +43,10 @@ class DistanceService(BaseService):
         self.feature_service = FeaturesService()
         self.distance_calculate_layer = self.configs['workspace'] + "\\" + DISTANCE_MATRIX_RESULTS_LAYER_NAME
 
+    @timer_decorator('DistanceService.prepare_data')
     def prepare_data(self) -> None:
-        initial = time.time()
         self.distance_db_services.delete_all_distances()
         self.network_analysis_service.remove_dataset_matrix()
-        ends = time.time()
-        print("prepare_data:" + ends - initial)
 
     def calculate_distances(self) -> None:
         if self.configs['execution']['clear_distance'] == 1:
@@ -58,8 +57,15 @@ class DistanceService(BaseService):
             self.network_analysis_service.solve_matrix_distance(self.layer_cost,
                                                                 NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
                                                                 NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
-            self.feature_service.copy_features(self.layer_cost + "\\Lines", self.distance_calculate_layer)
+            self.feature_service.copy_features(self.get_layer_matrix_distance(self.layer_cost),
+                                               self.distance_calculate_layer)
             self.network_analysis_service.remove_dataset_matrix()
+
+    def get_layer_matrix_distance(self, object_matrix_layer):
+        na_class = self.network_analysis_service.get_na_class(object_matrix_layer)
+        layer_object = object_matrix_layer.getOutput(0)
+        lines_sublayer = layer_object.listLayers(na_class["ODLines"])[0]
+        return lines_sublayer
 
 
     def __location_origin(self) -> None:

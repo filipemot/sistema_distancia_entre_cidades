@@ -11,6 +11,7 @@ from utils.constants import FEATURE_CITY, SHEET_NAME_CITY, FIELD_STATE, FIELD_CI
     STATE_FIELD_ID, STATE_FIELD_UF, FEATURE_CITY_POINT, FIELD_CITY_LAT, FIELD_CITY_LNG, FIELD_CITY_LNG_STR, \
     FIELD_CITY_LAT_STR, FIELD_CITY_OBJECT_ID, TYPE_TEXT, TYPE_DOUBLE, TYPE_FLOAT, FIELD_CITY_NAME, FIELD_CITY_CODE_IBGE, \
     FIELD_CITY_CAPITAL, FIELD_CITY_PHONE_NUMBER
+from utils.timer_decorator import timer_decorator
 
 
 class CityService(BaseService):
@@ -33,6 +34,7 @@ class CityService(BaseService):
     def list_values(self, list_values: List[dict]) -> None:
         self._list_values = list_values
 
+    @timer_decorator('CityService.prepare_data')
     def prepare_data(self) -> None:
         self.__create_table()
         self.__add_fields_in_table()

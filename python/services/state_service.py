@@ -4,6 +4,7 @@ import pandas as pd  # type: ignore
 
 from services.base_service import BaseService
 from utils.constants import FEATURE_STATE, SHEET_NAME_STATE, STATE_FIELD_UF, STATE_FIELD_ID
+from utils.timer_decorator import timer_decorator
 
 
 class StateService(BaseService):
@@ -31,6 +32,7 @@ class StateService(BaseService):
     def list_values(self, list_values: List[dict]) -> None:
         self._list_values = list_values
 
+    @timer_decorator('StateService.prepare_data')
     def prepare_data(self) -> None:
         self.__create_table()
         self._list_values = self.features_service.find_all(self._table_state,

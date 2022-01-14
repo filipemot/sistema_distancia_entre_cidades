@@ -7,6 +7,7 @@ from models.distance_matrix import DistanceMatrix
 from models.location import Location
 from utils.constants import NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS, NETWORK_ANALYTICS_LICENCE, \
     LICENCE_AVAILABLE
+from utils.timer_decorator import timer_decorator
 
 
 class NetworkAnalysisService:
@@ -15,8 +16,8 @@ class NetworkAnalysisService:
         self.__check_extension_network()
 
     @staticmethod
+    @timer_decorator('NetworkAnalysisService.prepare_data')
     def create_dataset_cost_matrix(distance_matrix: DistanceMatrix):
-        initial = time.time()
         cost_matrix_result = arcpy.na.MakeODCostMatrixAnalysisLayer(distance_matrix.layer_route,
                                                                     distance_matrix.layer_cost_name,
                                                                     distance_matrix.travel_mode,
@@ -28,11 +29,10 @@ class NetworkAnalysisService:
                                                                     distance_matrix.accumulate_attributes,
                                                                     distance_matrix.ignore_invalid_locations)
 
-        ends = time.time()
-        print("create_dataset_cost_matrix:" + ends - initial)
         return cost_matrix_result
 
     @staticmethod
+    @timer_decorator('NetworkAnalysisService.remove_dataset_matrix')
     def remove_dataset_matrix():
         datasets = arcpy.ListDatasets(NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS)
 
@@ -40,8 +40,8 @@ class NetworkAnalysisService:
             arcpy.Delete_management(dataset)
 
     @staticmethod
+    @timer_decorator('NetworkAnalysisService.add_locations')
     def add_locations(location: Location):
-        initial = time.time()
         arcpy.na.AddLocations(location.layer_matrix_name,
                               location.type_locations,
                               location.source_layer,
@@ -55,19 +55,16 @@ class NetworkAnalysisService:
                               location.snap_offset,
                               location.exclude_restricted,
                               None)
-        ends = time.time()
-        print("add_locations:" + ends - initial)
 
     @staticmethod
+    @timer_decorator('NetworkAnalysisService.solve_matrix_distance')
     def solve_matrix_distance(layer_matrix_name, ignore_invalid_locations, terminate_on_error):
-        initial = time.time()
         arcpy.na.Solve(layer_matrix_name,
                        ignore_invalid_locations,
                        terminate_on_error,
                        None,
                        '')
         ends = time.time()
-        print("solve_matrix_distance:" + ends - initial)
 
     @staticmethod
     def __get_na_class(object_matrix_layer):
@@ -75,6 +72,11 @@ class NetworkAnalysisService:
 
         return arcpy.na.GetNAClassNames(layer_object)
 
+    @staticmethod
+    def get_na_class(object_matrix_layer):
+        layer_object = object_matrix_layer.getOutput(0)
+
+        return arcpy.na.GetNAClassNames(layer_object)
 
     @staticmethod
     def __check_extension_network():
