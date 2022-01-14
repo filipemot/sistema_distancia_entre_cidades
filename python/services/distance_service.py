@@ -2,6 +2,7 @@ import time
 
 from arcpy import env  # type: ignore
 
+from models.distance import Distance
 from models.distance_matrix import DistanceMatrix
 from models.location import Location
 from services.base_service import BaseService
@@ -20,7 +21,10 @@ from utils.constants import DISTANCE_MATRIX_LAYER_NAME, DISTANCE_MATRIX_TRAVEL_M
     NETWORK_ANALYTICS_DESTINATION_FIND_CLOSEST, NETWORK_ANALYTICS_DESTINATION_APPEND_LOCATION, \
     NETWORK_ANALYTICS_DESTINATION_SNAP, NETWORK_ANALYTICS_DESTINATION_SNAP_OFFSET, \
     NETWORK_ANALYTICS_DESTINATION_EXCLUDE_RESTRICTED, NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS, \
-    NETWORK_ANALYTICS_TERMINATE_ON_ERROR, DISTANCE_MATRIX_RESULTS_LAYER_NAME
+    NETWORK_ANALYTICS_TERMINATE_ON_ERROR, DISTANCE_MATRIX_RESULTS_LAYER_NAME, DISTANCE_MATRIX_RETURN_FIELDS, \
+    DISTANCE_MATRIX_FIELD_NAME, DISTANCE_MATRIX_FIELD_MINUTES, DISTANCE_MATRIX_FIELD_TRAVEL_TIME, \
+    DISTANCE_MATRIX_FIELD_MILES, DISTANCE_MATRIX_FIELD_KILOMETERS, DISTANCE_MATRIX_FIELD_TIME_AT, \
+    DISTANCE_MATRIX_FIELD_WALK_TIME, DISTANCE_MATRIX_FIELD_TRUCK_TIME, DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME
 from utils.timer_decorator import timer_decorator
 
 
@@ -61,12 +65,43 @@ class DistanceService(BaseService):
                                                self.distance_calculate_layer)
             self.network_analysis_service.remove_dataset_matrix()
 
+    @timer_decorator('DistanceService.save_distance')
+    def save_distance(self) -> None:
+        if self.configs['execution']['save_distance'] == 1:
+            self.distance_db_services.delete_all_distances()
+            with self.feature_service.get_search_cursor(self.distance_calculate_layer,
+                                                        DISTANCE_MATRIX_RETURN_FIELDS) as cursor:
+                for row in cursor:
+                    distance_row = self.feature_service.read_row(row, DISTANCE_MATRIX_RETURN_FIELDS)
+                    id_origin, id_destination = self.__get_ids_row_matrix(distance_row)
+                    distance = Distance(id_origin,
+                                        id_destination,
+                                        distance_row[DISTANCE_MATRIX_FIELD_MINUTES],
+                                        distance_row[DISTANCE_MATRIX_FIELD_TRAVEL_TIME],
+                                        distance_row[DISTANCE_MATRIX_FIELD_MILES],
+                                        distance_row[DISTANCE_MATRIX_FIELD_KILOMETERS],
+                                        distance_row[DISTANCE_MATRIX_FIELD_TIME_AT],
+                                        distance_row[DISTANCE_MATRIX_FIELD_WALK_TIME],
+                                        distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TIME],
+                                        distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME])
+                    self.distance_db_services.insert_distances(distance)
+
+
     def get_layer_matrix_distance(self, object_matrix_layer):
         na_class = self.network_analysis_service.get_na_class(object_matrix_layer)
         layer_object = object_matrix_layer.getOutput(0)
         lines_sublayer = layer_object.listLayers(na_class["ODLines"])[0]
         return lines_sublayer
 
+    @staticmethod
+    def __get_ids_row_matrix(distance_row) -> tuple:
+        names = distance_row[DISTANCE_MATRIX_FIELD_NAME].split(' - ')
+        if len(names) == 2:
+            id_origin = int(names[0])
+            id_destination = int(names[1])
+            return id_origin, id_destination
+
+        return ()
 
     def __location_origin(self) -> None:
         location_origin: Location = Location(self.layer_cost,
