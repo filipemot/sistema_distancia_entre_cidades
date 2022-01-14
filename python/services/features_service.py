@@ -36,9 +36,9 @@ class FeaturesService:
         arcpy.management.XYTableToPoint(table, output_feature_class, x_field=x_field, y_field=y_field,
                                         coordinate_system=self.__SR)
 
-    @staticmethod
     @timer_decorator('FeaturesService.copy_features')
-    def copy_features(in_feature: str, out_feature: str) -> None:
+    def copy_features(self, in_feature: str, out_feature: str) -> None:
+        self.remove_feature(out_feature)
         arcpy.management.CopyFeatures(in_feature, out_feature, '', None, None, None)
 
     @staticmethod
