@@ -15,12 +15,11 @@ No diretório data disponibilizo a planilha de Municípios e Estados, que serão
 
 **Base de Arruamento**
 
-Estamos utilizando para a Geração o Open Street Map Premium
+Estamos utilizando para a Geração o Open Street Map
 
 **Licença**
 
 - ArcGIS com extensão Network Analytics
-- Open Street Map Premium
 
 **Solução**
 
