@@ -36,7 +36,10 @@ class StateService(BaseService):
     def prepare_data(self) -> None:
         self.__create_table()
         self._list_values = self.features_service.find_all(self._table_state,
-                                                                       [STATE_FIELD_ID, STATE_FIELD_UF])
+                                                           [STATE_FIELD_ID, STATE_FIELD_UF])
+
+    def remove_feature(self):
+        self.features_service.remove_feature(self.configs['workspace'] + "//" + FEATURE_STATE)
 
     def __create_table(self) -> None:
         self._table_state = self.features_service.excel_to_table(

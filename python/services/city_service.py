@@ -49,6 +49,11 @@ class CityService(BaseService):
         self.city_db_services.delete_all_cities()
         self.city_db_services.insert_cities(list_cities)
 
+    def remove_feature(self):
+        self.features_service.remove_feature(self.table_city_geo)
+        self.features_service.remove_feature(self.configs['workspace'] + "//" + FEATURE_CITY)
+        self.state.remove_feature()
+
     @staticmethod
     def __convert_feature_to_cities(list_city_features: pd.DataFrame) -> List[City]:
 

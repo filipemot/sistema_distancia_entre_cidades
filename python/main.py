@@ -15,6 +15,7 @@ def main():
                                                          city_services)
     distance_services.calculate_distances()
     distance_services.save_distance()
+    distance_services.remove_feature()
 
 
 if __name__ == '__main__':

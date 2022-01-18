@@ -86,6 +86,11 @@ class DistanceService(BaseService):
                                         distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME])
                     self.distance_db_services.insert_distances(distance)
 
+    def remove_feature(self):
+        self.feature_service.remove_feature(self.distance_calculate_layer)
+        self.network_analysis_service.remove_dataset_matrix()
+        self.city_services.remove_feature()
+
 
     def get_layer_matrix_distance(self, object_matrix_layer):
         na_class = self.network_analysis_service.get_na_class(object_matrix_layer)

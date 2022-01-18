@@ -17,3 +17,7 @@ class BaseService(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def prepare_data(self) -> None:
         ...
+
+    @abc.abstractmethod
+    def remove_feature(self) -> None:
+        ...
