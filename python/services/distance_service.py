@@ -1,5 +1,3 @@
-import time
-
 from arcpy import env  # type: ignore
 
 from models.distance import Distance
