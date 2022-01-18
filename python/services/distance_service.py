@@ -52,6 +52,7 @@ class DistanceService(BaseService):
         self.distance_db_services.delete_all_distances()
         self.network_analysis_service.remove_dataset_matrix()
 
+    @timer_decorator('DistanceService.calculate_distances')
     def calculate_distances(self) -> None:
         if self.configs['execution']['clear_distance'] == 1:
             self.prepare_data()
@@ -86,12 +87,13 @@ class DistanceService(BaseService):
                                         distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME])
                     self.distance_db_services.insert_distances(distance)
 
+    @timer_decorator('DistanceService.remove_feature')
     def remove_feature(self):
         self.feature_service.remove_feature(self.distance_calculate_layer)
         self.network_analysis_service.remove_dataset_matrix()
         self.city_services.remove_feature()
 
-
+    @timer_decorator('DistanceService.get_layer_matrix_distance')
     def get_layer_matrix_distance(self, object_matrix_layer):
         na_class = self.network_analysis_service.get_na_class(object_matrix_layer)
         layer_object = object_matrix_layer.getOutput(0)
@@ -99,6 +101,7 @@ class DistanceService(BaseService):
         return lines_sublayer
 
     @staticmethod
+    @timer_decorator('DistanceService.__get_ids_row_matrix')
     def __get_ids_row_matrix(distance_row) -> tuple:
         names = distance_row[DISTANCE_MATRIX_FIELD_NAME].split(' - ')
         if len(names) == 2:
@@ -108,6 +111,7 @@ class DistanceService(BaseService):
 
         return ()
 
+    @timer_decorator('DistanceService.__location_origin')
     def __location_origin(self) -> None:
         location_origin: Location = Location(self.layer_cost,
                                              NETWORK_ANALYTICS_ORIGIN_TYPE,
@@ -122,6 +126,7 @@ class DistanceService(BaseService):
                                              NETWORK_ANALYTICS_ORIGIN_EXCLUDE_RESTRICTED)
         self.network_analysis_service.add_locations(location_origin)
 
+    @timer_decorator('DistanceService.__location_destination')
     def __location_destination(self) -> None:
         location_destination: Location = Location(self.layer_cost,
                                                   NETWORK_ANALYTICS_DESTINATION_TYPE,

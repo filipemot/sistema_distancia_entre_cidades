@@ -49,12 +49,14 @@ class CityService(BaseService):
         self.city_db_services.delete_all_cities()
         self.city_db_services.insert_cities(list_cities)
 
+    @timer_decorator('CityService.remove_feature')
     def remove_feature(self):
         self.features_service.remove_feature(self.table_city_geo)
         self.features_service.remove_feature(self.configs['workspace'] + "//" + FEATURE_CITY)
         self.state.remove_feature()
 
     @staticmethod
+    @timer_decorator('CityService.__convert_feature_to_cities')
     def __convert_feature_to_cities(list_city_features: pd.DataFrame) -> List[City]:
 
         list_cities: List[City] = []
@@ -64,6 +66,7 @@ class CityService(BaseService):
 
         return list_cities
 
+    @timer_decorator('CityService.__save_field_state')
     def __save_field_state(self) -> None:
         cursor: arcpy.da.UpdateCursor = self.features_service.update_values(self.table_city,
                                                                             [FIELD_CITY_ID_STATE, FIELD_STATE])
@@ -73,6 +76,7 @@ class CityService(BaseService):
             cursor.updateRow(row)
         del cursor
 
+    @timer_decorator('CityService.__add_fields_in_table')
     def __add_fields_in_table(self) -> None:
         self.features_service.add_field_in_table(self.table_city, FIELD_STATE, TYPE_TEXT)
         self.features_service.add_computed_field(self.table_city, FIELD_CITY_ID, f'!{FIELD_CITY_OBJECT_ID}!', TYPE_TEXT)
@@ -81,6 +85,7 @@ class CityService(BaseService):
         self.features_service.add_computed_field(self.table_city, f'{FIELD_CITY_LNG}',
                                                  f'{TYPE_FLOAT}(!{FIELD_CITY_LAT_STR}!)', TYPE_DOUBLE)
 
+    @timer_decorator('CityService.__create_table')
     def __create_table(self) -> None:
         self.table_city = self.features_service.excel_to_table(
             self.configs['excel_city'],
