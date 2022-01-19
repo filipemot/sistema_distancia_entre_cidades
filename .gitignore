@@ -27,3 +27,7 @@ hs_err_pid*
 /python/services/__pycache__
 /python/utils/__pycache__
 /python/models/__pycache__
+/python/__pycache__
+/python/tests/__pycache__
+/python/.vscode
+/python/.coverage
