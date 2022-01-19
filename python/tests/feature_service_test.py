@@ -211,7 +211,7 @@ class TestFeatureService(unittest.TestCase):
         assert exists is False
         assert exists_before_remove is False
 
-    def test_get_read_row_with_field_exists(self):
+    def test_get_read_row(self):
         result = self.feature_service.get_search_cursor(self.table_copy, [FIELD_CITY_LAT])
 
         return_result = False
