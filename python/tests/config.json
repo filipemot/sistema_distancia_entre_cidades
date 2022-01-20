@@ -1,0 +1,12 @@
+{
+  "workspace": "D:\\ProjetosPessoais\\sistema_distancia_entre_cidades\\arcgis_project\\SistemaDistanciaEntreCidades\\SistemaDistanciaEntreCidades.gdb",
+  "excel_city": "D:\\ProjetosPessoais\\sistema_distancia_entre_cidades\\python\\data\\Municipios.xlsx",
+  "excel_states": "D:\\ProjetosPessoais\\sistema_distancia_entre_cidades\\python\\data\\Estados.xlsx",
+  "route": "C:\\Esri\\Open Street Map\\Dados\\FGDB\\StreetMap_Data\\LatinAmerica.gdb\\Routing\\Routing_ND",
+  "execution": {
+    "clear_state": 0,
+    "clear_city": 0,
+    "clear_distance": 0,
+    "save_distance": 0
+  }
+}

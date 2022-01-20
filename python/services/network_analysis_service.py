@@ -16,7 +16,7 @@ class NetworkAnalysisService:
         self.__check_extension_network()
 
     @staticmethod
-    @timer_decorator('NetworkAnalysisService.prepare_data')
+    @timer_decorator('NetworkAnalysisService.create_dataset_cost_matrix')
     def create_dataset_cost_matrix(distance_matrix: DistanceMatrix):
         cost_matrix_result = arcpy.na.MakeODCostMatrixAnalysisLayer(distance_matrix.layer_route,
                                                                     distance_matrix.layer_cost_name,
@@ -64,21 +64,16 @@ class NetworkAnalysisService:
                        terminate_on_error,
                        None,
                        '')
-        ends = time.time()
 
     @staticmethod
-    def __get_na_class(object_matrix_layer):
-        layer_object = object_matrix_layer.getOutput(0)
-
-        return arcpy.na.GetNAClassNames(layer_object)
-
-    @staticmethod
+    @timer_decorator('NetworkAnalysisService.get_na_class')
     def get_na_class(object_matrix_layer):
         layer_object = object_matrix_layer.getOutput(0)
 
         return arcpy.na.GetNAClassNames(layer_object)
 
     @staticmethod
+    @timer_decorator('NetworkAnalysisService.__check_extension_network')
     def __check_extension_network():
         if arcpy.CheckExtension(NETWORK_ANALYTICS_LICENCE) == LICENCE_AVAILABLE:
             arcpy.CheckOutExtension(NETWORK_ANALYTICS_LICENCE)
