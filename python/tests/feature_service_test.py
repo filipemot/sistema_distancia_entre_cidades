@@ -16,20 +16,16 @@ class TestFeatureService(unittest.TestCase):
     path = os.path.dirname(os.path.realpath(__file__))
     excel_file_state = os.path.join(path, 'data', 'Estados.xlsx')
     excel_file_municipios = os.path.join(path, 'data', 'Municipios.xlsx')
-    table_temp = TEST_GDB + '/estados_temp'
     table_copy = TEST_GDB + '/estados_copy_temp'
-    table_temp_delete = TEST_GDB + '/estados_temp_delete'
-    table_temp_convert = TEST_GDB + '/city_temp_convert'
+    table_temp = TEST_GDB + '/city_temp_convert'
 
     def setUp(self):
-        arcpy.conversion.ExcelToTable(self.excel_file_state, self.table_temp, 'estados', 1, '')
-        arcpy.conversion.ExcelToTable(self.excel_file_state, self.table_temp_delete, 'estados', 1, '')
-        arcpy.conversion.ExcelToTable(self.excel_file_municipios, self.table_temp_convert, 'municipios', 1, '')
-        self.feature_service.add_computed_field(self.table_temp_convert, f'{FIELD_CITY_LAT}',
+        arcpy.conversion.ExcelToTable(self.excel_file_municipios, self.table_temp, 'municipios', 1, '')
+        self.feature_service.add_computed_field(self.table_temp, f'{FIELD_CITY_LAT}',
                                                 f'{TYPE_FLOAT}(!{FIELD_CITY_LNG_STR}!)', TYPE_DOUBLE)
-        self.feature_service.add_computed_field(self.table_temp_convert, f'{FIELD_CITY_LNG}',
+        self.feature_service.add_computed_field(self.table_temp, f'{FIELD_CITY_LNG}',
                                                 f'{TYPE_FLOAT}(!{FIELD_CITY_LAT_STR}!)', TYPE_DOUBLE)
-        self.feature_service.convert_table_to_point(self.table_temp_convert, self.table_copy, FIELD_CITY_LAT,
+        self.feature_service.convert_table_to_point(self.table_temp, self.table_copy, FIELD_CITY_LAT,
                                                     FIELD_CITY_LNG)
 
     def test_create_excel_to_table_with_excel_file_exists(self):
@@ -46,9 +42,9 @@ class TestFeatureService(unittest.TestCase):
     def test_find_all_with_columns_exists(self):
         result = self.feature_service.find_all(self.table_temp, ['Column1', 'Column2'])
 
-        assert len(result.index) == 27
-        assert result.values[0][0] == '11'
-        assert result.values[0][1] == 'RO'
+        assert len(result.index) == 6
+        assert result.values[0][0] == '5200050'
+        assert result.values[0][1] == 'Abadia de Goiás'
 
     def test_find_all_with_columns_not_exists(self):
         with pytest.raises(RuntimeError) as e:
@@ -58,7 +54,7 @@ class TestFeatureService(unittest.TestCase):
 
     def test_convert_table_to_point_with_feature_exists(self):
         out = self.TEST_GDB + "/point"
-        self.feature_service.convert_table_to_point(self.table_temp_convert, out, FIELD_CITY_LAT, FIELD_CITY_LNG)
+        self.feature_service.convert_table_to_point(self.table_temp, out, FIELD_CITY_LAT, FIELD_CITY_LNG)
 
         exists = arcpy.Exists(out)
 
@@ -67,7 +63,7 @@ class TestFeatureService(unittest.TestCase):
     def test_convert_table_to_point_with_fields_lat_not_exists(self):
         with pytest.raises(ExecuteError) as e:
             out = self.TEST_GDB + "/point"
-            self.feature_service.convert_table_to_point(self.table_temp_convert, out, FIELD_CITY_LAT + "_Not_Found",
+            self.feature_service.convert_table_to_point(self.table_temp, out, FIELD_CITY_LAT + "_Not_Found",
                                                         FIELD_CITY_LNG)
 
         return e.value.args[0].index('Field X_Not_Found') > -1
@@ -75,7 +71,7 @@ class TestFeatureService(unittest.TestCase):
     def test_convert_table_to_point_with_fields_lng_not_exists(self):
         with pytest.raises(ExecuteError) as e:
             out = self.TEST_GDB + "/point"
-            self.feature_service.convert_table_to_point(self.table_temp_convert, out, FIELD_CITY_LAT,
+            self.feature_service.convert_table_to_point(self.table_temp, out, FIELD_CITY_LAT,
                                                         FIELD_CITY_LNG + "_Not_Found")
 
         return e.value.args[0].index('Field Y_Not_Found') > -1
@@ -83,10 +79,10 @@ class TestFeatureService(unittest.TestCase):
     def test_convert_table_to_point_with_fields_feature_not_exists(self):
         with pytest.raises(ExecuteError) as e:
             out = self.TEST_GDB + "/point"
-            self.feature_service.convert_table_to_point(self.table_temp_convert + "_Not_Found", out, FIELD_CITY_LAT,
+            self.feature_service.convert_table_to_point(self.table_temp + "_Not_Found", out, FIELD_CITY_LAT,
                                                         FIELD_CITY_LNG)
 
-        return e.value.args[0].index(f'Input Table: Dataset {self.table_temp_convert + "_Not_Found"} '
+        return e.value.args[0].index(f'Input Table: Dataset {self.table_temp + "_Not_Found"} '
                                      f'does not exist') > -1
 
     def test_copy_features_with_feature_exists(self):
@@ -196,17 +192,17 @@ class TestFeatureService(unittest.TestCase):
         assert e.value.args[0].index(f'Invalid field {FIELD_CITY_LAT_STR + "_Not_Found"}') > -1
 
     def test_remove_features_with_feature_exists(self):
-        exists = arcpy.Exists(self.table_temp_delete)
-        self.feature_service.remove_feature(self.table_temp_delete)
-        exists_before_remove = arcpy.Exists(self.table_temp_delete)
+        exists = arcpy.Exists(self.table_temp)
+        self.feature_service.remove_feature(self.table_temp)
+        exists_before_remove = arcpy.Exists(self.table_temp)
 
         assert exists is True
         assert exists_before_remove is False
 
     def test_remove_features_with_feature_not_exists(self):
-        exists = arcpy.Exists(self.table_temp_delete + "_not_found")
-        self.feature_service.remove_feature(self.table_temp_delete + "_not_found")
-        exists_before_remove = arcpy.Exists(self.table_temp_delete + "_not_found")
+        exists = arcpy.Exists(self.table_temp + "_not_found")
+        self.feature_service.remove_feature(self.table_temp + "_not_found")
+        exists_before_remove = arcpy.Exists(self.table_temp + "_not_found")
 
         assert exists is False
         assert exists_before_remove is False

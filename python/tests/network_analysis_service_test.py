@@ -2,8 +2,9 @@ import os
 import unittest
 
 import arcpy  # type: ignore
+import pytest
 from arcgisscripting import ExecuteError  # type: ignore
-from arcpy import env
+from arcpy import env  # type: ignore
 
 from models.distance_matrix import DistanceMatrix
 from models.location import Location
@@ -31,6 +32,7 @@ from utils.constants import DISTANCE_MATRIX_LAYER_NAME, DISTANCE_MATRIX_TRAVEL_M
 class TestNetworkAnalysisService(unittest.TestCase):
     TEST_GDB = 'in_memory'
     network_analysis_service: NetworkAnalysisService = NetworkAnalysisService()
+    layer_cost = None
 
     def setUp(self) -> None:
         self.configs_service = ConfigsService(os.path.dirname(os.path.abspath(__file__)), "config.json")
@@ -55,17 +57,13 @@ class TestNetworkAnalysisService(unittest.TestCase):
                                                               DISTANCE_MATRIX_IGNORE_INVALID_LOCATIONS)
 
     def test_create_dataset_cost_matrix(self):
-        layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
-        exists = arcpy.Exists(layer_cost)
+        self.layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
+
+        exists = arcpy.Exists(self.layer_cost)
         assert exists is True
 
     def test_remove_dataset_matrix(self):
-        layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
-        self.__location_origin(layer_cost)
-        self.__location_destination(layer_cost)
-        self.network_analysis_service.solve_matrix_distance(layer_cost,
-                                                            NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
-                                                            NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
+        self.__execute_distance_matrix()
 
         datasets = arcpy.ListDatasets(NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS)
         qtd_datasets_after_remove = len(datasets)
@@ -74,7 +72,30 @@ class TestNetworkAnalysisService(unittest.TestCase):
         datasets = arcpy.ListDatasets(NETWORK_ANALYTICS_DATASET_NAME, TYPE_LIST_DATASETS)
         qtd_datasets_before_remove = len(datasets)
 
-        assert qtd_datasets_before_remove == 0 and qtd_datasets_after_remove == 1
+        assert qtd_datasets_before_remove == 0 and qtd_datasets_after_remove > 0
+
+    def test_get_na_class_feature_exists(self):
+        self.__execute_distance_matrix()
+        na_class = self.network_analysis_service.get_na_class(self.layer_cost)
+
+        assert type(na_class) == dict
+
+    def test_get_na_class_feature_not_exists(self):
+        with pytest.raises(RuntimeError) as e:
+            self.__execute_distance_matrix()
+            self.network_analysis_service.get_na_class(None)
+
+        assert e.value.args[0] == 'Layer is not a network dataset.'
+
+
+    def __execute_distance_matrix(self):
+        self.layer_cost = self.network_analysis_service.create_dataset_cost_matrix(self.distance_matrix)
+
+        self.__location_origin(self.layer_cost)
+        self.__location_destination(self.layer_cost)
+        self.network_analysis_service.solve_matrix_distance(self.layer_cost,
+                                                            NETWORK_ANALYTICS_IGNORE_INVALID_LOCATIONS,
+                                                            NETWORK_ANALYTICS_TERMINATE_ON_ERROR)
 
     def __location_origin(self, layer_cost) -> None:
         location_origin: Location = Location(layer_cost,
@@ -106,7 +127,7 @@ class TestNetworkAnalysisService(unittest.TestCase):
 
     def __create_table(self) -> None:
         self.table_city = self.features_service.excel_to_table(
-            self.configs['excel_city'],
+            self.configs['excel_city'],  # type: ignore
             self.configs['workspace'],
             FEATURE_CITY,
             SHEET_NAME_CITY)
@@ -119,8 +140,12 @@ class TestNetworkAnalysisService(unittest.TestCase):
         self.features_service.add_computed_field(self.table_city, f'{FIELD_CITY_LNG}',
                                                  f'{TYPE_FLOAT}(!{FIELD_CITY_LAT_STR}!)', TYPE_DOUBLE)
 
-    def tearDown(self):
+    def __remove_items(self):
         arcpy.Delete_management(self.TEST_GDB + '/' + FEATURE_CITY)
         arcpy.Delete_management(self.table_city_geo)
         self.network_analysis_service.remove_dataset_matrix()
+        arcpy.Delete_management(self.layer_cost)
+
+    def tearDown(self):
+        self.__remove_items()
 

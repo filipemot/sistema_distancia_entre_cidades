@@ -1,5 +1,4 @@
 import logging
-import time
 
 import arcpy  # type: ignore
 
@@ -67,10 +66,14 @@ class NetworkAnalysisService:
 
     @staticmethod
     @timer_decorator('NetworkAnalysisService.get_na_class')
-    def get_na_class(object_matrix_layer):
-        layer_object = object_matrix_layer.getOutput(0)
+    def get_na_class(object_matrix_layer) -> dict:
 
-        return arcpy.na.GetNAClassNames(layer_object)
+        if hasattr(object_matrix_layer, 'getOutput'):
+            layer_object = object_matrix_layer.getOutput(0)
+
+            return arcpy.na.GetNAClassNames(layer_object)
+        else:
+            raise RuntimeError('Layer is not a network dataset.')
 
     @staticmethod
     @timer_decorator('NetworkAnalysisService.__check_extension_network')
