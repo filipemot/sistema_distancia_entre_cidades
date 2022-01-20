@@ -23,8 +23,7 @@ class TestConfigsDbService(unittest.TestCase):
     def test_configs_db_service_file_not_exists(self):
         with pytest.raises(Exception) as e:
             self.configs_service = ConfigDbService()
-            db = self.configs_service.config(filename=os.path.dirname(os.path.abspath(__file__)) +
-                                                      "\\database_not_exists.ini")
+            self.configs_service.config(filename=os.path.dirname(os.path.abspath(__file__)) + "\\data_not_exists.ini")
 
         assert e.value.args[0].index('Section postgresql not found in the') > -1
 
