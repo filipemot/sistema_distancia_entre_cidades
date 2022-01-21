@@ -5,10 +5,11 @@ from services.features_service import FeaturesService
 
 
 class BaseService(metaclass=abc.ABCMeta):
+    features_service: FeaturesService
 
     def __init__(self, folder_path: str, file_name: str) -> None:
         self.config_service: ConfigsService = ConfigsService(folder_path, file_name)
-        self.features_service: FeaturesService = FeaturesService()
+        self.features_service = FeaturesService()
 
     @property
     def configs(self):
