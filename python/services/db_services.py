@@ -7,13 +7,17 @@ from services.config_db_service import ConfigDbService
 
 class DbService:
 
+    config_db_service = None
+
     def __init__(self):
         self.conn = None
         self.config_db_service = ConfigDbService()
-        self.__connect()
+        self.connect()
 
-    def __connect(self):
+    def connect(self):
         try:
+
+
             params = self.config_db_service.config()
 
             self.conn = psycopg2.connect(**params)

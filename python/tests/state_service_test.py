@@ -9,7 +9,7 @@ from arcgisscripting import ExecuteError  # type: ignore
 from services.state_service import StateService
 
 
-class StateConfigsService(unittest.TestCase):
+class TestStateConfigsService(unittest.TestCase):
 
     @mock.patch("services.features_service")
     def test_state_configs_service_prepare_data(self, spy_features_service):
