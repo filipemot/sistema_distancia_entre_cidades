@@ -8,9 +8,10 @@ from utils.constants import TABLE_DISTANCE_POSTGRESQL, FIELD_DISTANCE_TABLE_POST
 
 
 class DistanceDbService:
+    db_services: DbService = None
 
     def __init__(self):
-        self.db_services: DbService = DbService()
+        self.db_services = DbService()
 
     def delete_all_distances(self):
         cursor = self.db_services.conn.cursor()
