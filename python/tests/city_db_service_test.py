@@ -10,13 +10,6 @@ from arcgisscripting import ExecuteError  # type: ignore
 from models.city import City
 from services.city_db_service import CityDbService
 
-class MockStr:
-    def __init__(self, data):
-        self.data = data
-
-    def decode(self, type_decode):
-        return self.data
-
 
 class MockCursorPsycopg2:
     method_access = ''
