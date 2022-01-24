@@ -1,8 +1,7 @@
 import unittest
 
 from unittest import mock
-from unittest.mock import Mock
-from mock import patch
+from unittest.mock import Mock, patch
 
 import pandas as pd  # type: ignore
 
@@ -10,7 +9,6 @@ from arcgisscripting import ExecuteError  # type: ignore
 
 from models.city import City
 from services.city_db_service import CityDbService
-
 
 class MockStr:
     def __init__(self, data):
@@ -23,34 +21,13 @@ class MockStr:
 class MockCursorPsycopg2:
     method_access = ''
 
-    def mogrify(self, query, vars_str=None) -> MockStr:
-        self.method_access = 'mogrify'
-        return MockStr(str(vars_str))
-
     def execute(self, sql) -> None:
-        self.method_access = self.method_access + ',execute'
+        self.method_access = self.method_access + 'execute'
         pass
 
     def close(self) -> None:
+        self.method_access = self.method_access + ',close'
         pass
-
-
-class MockPsycopg2:
-    method_access = ''
-    cursor_mock = MockCursorPsycopg2()
-
-    def cursor(self) -> MockCursorPsycopg2:
-        self.method_access = 'Cursor'
-        return self.cursor_mock
-
-
-class MockDbService:
-    conn = MockPsycopg2()
-
-    method_access = ''
-
-    def commit(self) -> None:
-        self.method_access = 'Commit'
 
 
 class TestCityDbService(unittest.TestCase):
@@ -74,10 +51,16 @@ class TestCityDbService(unittest.TestCase):
         list_cities = [city]
 
         city_db_service = CityDbService()
-        city_db_service.db_services = MockDbService()
-        city_db_service.insert_cities(list_cities)
 
-        assert city_db_service.db_services is not None
-        assert city_db_service.db_services.method_access == 'Commit'
-        assert city_db_service.db_services.conn.method_access == 'Cursor'
-        assert city_db_service.db_services.conn.cursor_mock.method_access == 'mogrify,execute'
+        with mock.patch.object(CityDbService, "_CityDbService__get_values_insert") as spy_get_values_insert:
+            with mock.patch.object(CityDbService, "db_services") as spy_db_services:
+                cursor = MockCursorPsycopg2()
+                spy_get_values_insert.return_value = 'sql'
+                spy_db_services.conn.cursor.return_value = cursor
+
+                city_db_service.insert_cities(list_cities)
+                spy_db_services.conn.cursor.assert_called_once()
+
+                spy_db_services.commit.assert_called_once()
+                assert spy_db_services.conn.cursor is not None
+                assert cursor.method_access == 'execute,close'

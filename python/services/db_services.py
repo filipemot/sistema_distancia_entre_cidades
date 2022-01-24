@@ -8,6 +8,7 @@ from services.config_db_service import ConfigDbService
 class DbService:
 
     config_db_service = None
+    conn = None
 
     def __init__(self):
         self.conn = None

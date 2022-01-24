@@ -10,6 +10,7 @@ from utils.constants import TABLE_CITY_POSTGRESQL, FIELD_CITY_ID_POSTGREE, FIELD
 
 
 class CityDbService:
+    db_services = None
 
     def __init__(self):
         self.db_services: DbService = DbService()
