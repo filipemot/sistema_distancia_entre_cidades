@@ -1,6 +1,6 @@
 from typing import List
 
-import psycopg2
+import psycopg2  # type: ignore
 
 from models.city import City
 from services.db_services import DbService

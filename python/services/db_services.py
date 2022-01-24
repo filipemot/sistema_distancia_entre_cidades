@@ -17,7 +17,6 @@ class DbService:
     def connect(self):
         try:
 
-
             params = self.config_db_service.config()
 
             self.conn = psycopg2.connect(**params)
