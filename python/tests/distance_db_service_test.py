@@ -1,7 +1,7 @@
 import unittest
 
 from unittest import mock
-from unittest.mock import Mock, patch, call
+from unittest.mock import patch
 
 import pandas as pd  # type: ignore
 
@@ -16,6 +16,8 @@ class MockCursorPsycopg2:
     method_access = ''
 
     def execute(self, sql, parameters=None) -> None:
+        print(sql)
+        print(parameters)
         self.method_access = self.method_access + 'execute'
         pass
 

@@ -37,7 +37,7 @@ class TestCityService(unittest.TestCase):
 
     @patch("services.city_service.CityService.__init__")
     def test_city_service_remove_feature(self, spy_city_service_init):
-        with mock.patch.object(BaseService, "configs", {'workspace': 'workspace'}) as spy_config_service:
+        with mock.patch.object(BaseService, "configs", {'workspace': 'workspace'}):
             spy_city_service_init.return_value = None
 
             city_service = CityService()

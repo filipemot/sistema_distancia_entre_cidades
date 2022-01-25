@@ -68,22 +68,23 @@ class DistanceService(BaseService):
     def save_distance(self) -> None:
         if self.configs['execution']['save_distance'] == 1:
             self.distance_db_services.delete_all_distances()
-            with self.feature_service.get_search_cursor(self.distance_calculate_layer,
-                                                        DISTANCE_MATRIX_RETURN_FIELDS) as cursor:
-                for row in cursor:
-                    distance_row = self.feature_service.read_row(row, DISTANCE_MATRIX_RETURN_FIELDS)
-                    id_origin, id_destination = self.__get_ids_row_matrix(distance_row)
-                    distance = Distance(id_origin,
-                                        id_destination,
-                                        distance_row[DISTANCE_MATRIX_FIELD_MINUTES],
-                                        distance_row[DISTANCE_MATRIX_FIELD_TRAVEL_TIME],
-                                        distance_row[DISTANCE_MATRIX_FIELD_MILES],
-                                        distance_row[DISTANCE_MATRIX_FIELD_KILOMETERS],
-                                        distance_row[DISTANCE_MATRIX_FIELD_TIME_AT],
-                                        distance_row[DISTANCE_MATRIX_FIELD_WALK_TIME],
-                                        distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TIME],
-                                        distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME])
-                    self.distance_db_services.insert_distances(distance)
+            cursor = self.feature_service.get_search_cursor(self.distance_calculate_layer,
+                                                            DISTANCE_MATRIX_RETURN_FIELDS)
+            for row in cursor:
+                distance_row = self.feature_service.read_row(row, DISTANCE_MATRIX_RETURN_FIELDS)
+                id_origin, id_destination = self.__get_ids_row_matrix(distance_row)
+                distance = Distance(id_origin,
+                                    id_destination,
+                                    distance_row[DISTANCE_MATRIX_FIELD_MINUTES],
+                                    distance_row[DISTANCE_MATRIX_FIELD_TRAVEL_TIME],
+                                    distance_row[DISTANCE_MATRIX_FIELD_MILES],
+                                    distance_row[DISTANCE_MATRIX_FIELD_KILOMETERS],
+                                    distance_row[DISTANCE_MATRIX_FIELD_TIME_AT],
+                                    distance_row[DISTANCE_MATRIX_FIELD_WALK_TIME],
+                                    distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TIME],
+                                    distance_row[DISTANCE_MATRIX_FIELD_TRUCK_TRAVEL_TIME])
+                self.distance_db_services.insert_distances(distance)
+            del cursor
 
     @timer_decorator('DistanceService.remove_feature')
     def remove_feature(self):
