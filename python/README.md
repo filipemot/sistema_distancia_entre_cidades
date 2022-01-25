@@ -87,6 +87,10 @@ password = postgres
 
 port = 5434
 
+**Testes**
+
+Na pasta /tests estão os testes unitários, para executar os testes é necessário utilizar o pytest
+
 **Tabelas**
 
 As tabelas do banco de dados são geradas pelo projeto do backend. Mas se precisar segue os scripts para criação das tabelas:
