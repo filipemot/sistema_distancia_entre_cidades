@@ -35,7 +35,7 @@ public class MunicipioResourceTest {
     private final UUID UUID_TEST  = UUID.randomUUID();
 
     @Test
-    public void testPesquisaPorTipoContaComIdIgualUUIDTest() throws Exception {
+    public void testPesquisaPorMunicipioComIdIgualUUIDTest() throws Exception {
         MunicipioDTO municipioDTO = getMunicipioDTO();
 
         Mockito.when(municipioService.findById(UUID_TEST))
@@ -76,7 +76,7 @@ public class MunicipioResourceTest {
     }
 
     @Test
-    public void testAtualizarMunicipioContaEncontrado() throws Exception {
+    public void testAtualizarMunicipioComMunicipioEncontrado() throws Exception {
         MunicipioDTO municipio = getMunicipioDTO();
         String requestJson = getJson(municipio);
 

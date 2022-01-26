@@ -22,8 +22,8 @@ public class MunicipioResource {
         return this.municipioService.findAll();
     }
 
-    public MunicipioResource(MunicipioService tipoContaService){
-        this.municipioService = tipoContaService;
+    public MunicipioResource(MunicipioService municipioService){
+        this.municipioService = municipioService;
     }
 
     @GetMapping("/{id}")
@@ -41,24 +41,24 @@ public class MunicipioResource {
     }
 
     @PostMapping
-    public ResponseEntity<MunicipioDTO> save(@RequestBody MunicipioDTO tipoConta) {
+    public ResponseEntity<MunicipioDTO> save(@RequestBody MunicipioDTO municipioDTO) {
 
-        MunicipioDTO municipioDTO = this.municipioService.save(tipoConta);
+        MunicipioDTO municipioDTOSaved = this.municipioService.save(municipioDTO);
 
-        return new ResponseEntity<>(municipioDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(municipioDTOSaved, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public MunicipioDTO update(@PathVariable UUID id, @RequestBody MunicipioDTO tipoConta) {
-        MunicipioDTO municipioDTO;
+    public MunicipioDTO update(@PathVariable UUID id, @RequestBody MunicipioDTO municipioDTO) {
+        MunicipioDTO municipioDTOSaved;
         try {
-            municipioDTO = this.municipioService.update(id, tipoConta);
+            municipioDTOSaved = this.municipioService.update(id, municipioDTO);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, e.getMessage()
             );
         }
-        return municipioDTO;
+        return municipioDTOSaved;
     }
 
     @DeleteMapping("/{id}")

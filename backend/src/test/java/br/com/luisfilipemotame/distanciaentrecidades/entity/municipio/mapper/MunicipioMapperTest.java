@@ -23,13 +23,13 @@ public class MunicipioMapperTest {
         municipio.setUf("SP");
         municipio.setDdd(11);
 
-        MunicipioDTO tipoContaDTO = MunicipioMapper.INSTANCE.municipioToMunicipioDto(municipio);
-        asserts(municipio, tipoContaDTO);
+        MunicipioDTO municipioDTO = MunicipioMapper.INSTANCE.municipioToMunicipioDto(municipio);
+        asserts(municipio, municipioDTO);
     }
 
 
     @Test
-    public void testMapperTipoContaDTOToTipoConta() {
+    public void testMapperMunicipioDTOToMunicipio() {
         MunicipioDTO municipioDTO = new MunicipioDTO();
         municipioDTO.setId(UUID.randomUUID());
         municipioDTO.setIdReferencia(1);
