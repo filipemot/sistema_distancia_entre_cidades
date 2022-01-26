@@ -101,7 +101,7 @@ public class MunicipioServiceTest {
             municipioService.update(UUID_TEST, municipioDTO);
             fail("Falha");
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("municipio não encontrado");
+            assertThat(e.getMessage()).isEqualTo("Municipio não encontrado");
         } catch (Exception e) {
             fail("Falha");
         }
@@ -181,7 +181,7 @@ public class MunicipioServiceTest {
             municipioService.findById(UUID_TEST);
             fail("Falha");
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("municipio não encontrado");
+            assertThat(e.getMessage()).isEqualTo("Municipio não encontrado");
         } catch (Exception e) {
             fail("Falha");
         }
