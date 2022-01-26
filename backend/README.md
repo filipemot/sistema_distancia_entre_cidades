@@ -1,3 +1,4 @@
+
 # Sistema de Distância entre Cidades - Backend
 
 
@@ -18,19 +19,19 @@
 
 Entrar em backend/docker
 
-```
-docker-compose -f banco_docker_compose.yml up -d
-```
+```  
+docker-compose -f banco_docker_compose.yml up -d  
+```  
 
 **Configuração Banco**
 
 Entrar em backend/src/main/resources/application.properties
 
-```yaml
-spring.datasource.url=jdbc:postgresql://localhost:5432/distanciaentrecidades
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
+```yaml  
+spring.datasource.url=jdbc:postgresql://localhost:5432/distanciaentrecidades  
+spring.datasource.username=postgres  
+spring.datasource.password=postgres  
+```  
 
 **Criação da Imagem da Aplicação em Container**
 
@@ -60,18 +61,18 @@ spring.datasource.password=postgres
 
 **Body**
 
-```json
-{
-    "idReferencia":1,
-    "nome":"Municipio 1",
-    "codigoIbge": 1005,
-    "latitude": -45.5,
-    "longitude": -25.50,
-    "capital": false,
-    "uf": "SP",
-    "ddd": 11    
-}
-```
+```json  
+{  
+	 "idReferencia":1, 
+	 "nome":"Municipio 1", 
+	 "codigoIbge": 1005, 
+	 "latitude": -45.5, 
+	 "longitude": -25.50,
+	 "capital": false, 
+	 "uf": "SP", 
+	 "ddd": 11 
+}  
+```  
 
 **Atualizar**
 
@@ -79,20 +80,76 @@ spring.datasource.password=postgres
 
 **Body**
 
-```json
-{
-    "idReferencia":1,
-    "nome":"Municipio 1",
-    "codigoIbge": 1005,
-    "latitude": -45.5,
-    "longitude": -25.50,
-    "capital": false,
-    "uf": "SP",
-    "ddd": 11    
-}
-```
+```json  
+{  
+	 "idReferencia":1, 
+	 "nome":"Municipio 1", 
+	 "codigoIbge": 1005, 
+	 "latitude": -45.5, 
+	 "longitude": -25.50,
+	 "capital": false, 
+	 "uf": "SP", 
+	 "ddd": 11 
+}  
+```  
 
 **Deletar**
 
 **DEL** [http://localhost:8080/api/municipios/{id}](http://localhost:8080/api/municipios/%7Bid%7D)
 
+
+## Distancias
+
+**Listar Todos**
+
+**GET** [http://localhost:8080/api/distancias](http://localhost:8080/api/distancias)
+
+**Pesquisar por ID**
+
+**GET** [http://localhost:8080/api/distancias/{id}](http://localhost:8080/api/distancias/%7Bid%7D)
+
+**Salvar**
+
+**POST** [http://localhost:8080/api/distancias](http://localhost:8080/api/distancias)
+
+**Body**
+
+```json  
+{  
+	 "idMunicipioOrigem":1, 
+	 "idMunicipioDestino":2, 
+	 "minutos": 1.0, 
+	 "tempoViagem": 2.0, 
+	 "milhas": 3.0,
+	 "kilometros": 4,0, 
+	 "tempoAt": 5,0, 
+	 "tempoAndando": 6.0, 
+	 "tempoCaminhao": 7.0, 
+	 "tempoViagemCaminhao": 8.0
+} 
+```  
+
+**Atualizar**
+
+**PUT** [http://localhost:8080/api/distancias/{id}](http://localhost:8080/api/distancias/%7Bid%7D)
+
+**Body**
+
+```json  
+{  
+	 "idMunicipioOrigem":1, 
+	 "idMunicipioDestino":2, 
+	 "minutos": 1.0, 
+	 "tempoViagem": 2.0, 
+	 "milhas": 3.0,
+	 "kilometros": 4,0, 
+	 "tempoAt": 5,0, 
+	 "tempoAndando": 6.0, 
+	 "tempoCaminhao": 7.0, 
+	 "tempoViagemCaminhao": 8.0
+}  
+```  
+
+**Deletar**
+
+**DEL** [http://localhost:8080/api/distancias/{id}](http://localhost:8080/api/distancias/%7Bid%7D)
