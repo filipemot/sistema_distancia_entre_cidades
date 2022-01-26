@@ -27,7 +27,7 @@ docker-compose -f banco_docker_compose.yml up -d
 Entrar em backend/src/main/resources/application.properties
 
 ```yaml
-spring.datasource.url=jdbc:postgresql://localhost:5432/controlegastos
+spring.datasource.url=jdbc:postgresql://localhost:5432/distanciaentrecidades
 spring.datasource.username=postgres
 spring.datasource.password=postgres
 ```
@@ -35,7 +35,7 @@ spring.datasource.password=postgres
 **Criação da Imagem da Aplicação em Container**
 
 - Compilar Projeto: `mvn clean package`
-- Criar Imagem do Container: `docker build -f Dockerfile . -t sistema_controle_gastos_mensais`
+- Criar Imagem do Container: `docker build -f Dockerfile . -t sistema_distancia_entre_cidades`
 
 **Criação do Container**
 
