@@ -44,9 +44,9 @@ spring.datasource.password=postgres
 
 # API's Disponibilizadas
 
-## Tipo de Conta
+## Municipios
 
-**Listar Todas**
+**Listar Todos**
 
 **GET** [http://localhost:8080/api/municipios](http://localhost:8080/api/municipios)
 
