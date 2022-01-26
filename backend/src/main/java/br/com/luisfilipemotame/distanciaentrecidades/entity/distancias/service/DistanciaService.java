@@ -57,6 +57,19 @@ public class DistanciaService {
         return listDistanciaDTO;
     }
 
+    public List<DistanciaDTO> findAllByIdMunicipioOrigemAndIdMunicipioDestino(int idMunicipioOrigem,
+                                                                              int idMunicipioDestino) {
+        List<Distancia> listDistancia = distanciaRepository.findAllByIdMunicipioOrigemAndIdMunicipioDestino(
+                idMunicipioOrigem, idMunicipioDestino);
+        List<DistanciaDTO> listDistanciaDTO = new ArrayList<>();
+
+        for (Distancia distancia : listDistancia) {
+            listDistanciaDTO.add(distanciaMapper.distanciaToDistanciaDto(distancia));
+        }
+
+        return listDistanciaDTO;
+    }
+
     public void delete(UUID id) throws NotFoundException {
         Distancia distancia = getDistancia(id);
         distanciaRepository.delete(distancia);

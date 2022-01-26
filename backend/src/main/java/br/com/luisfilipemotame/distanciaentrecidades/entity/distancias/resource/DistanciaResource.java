@@ -26,6 +26,12 @@ public class DistanciaResource {
         this.distanciaService = distanciaService;
     }
 
+    @GetMapping("/{idOrigem}/{idDestino}")
+    public List<DistanciaDTO> list(@PathVariable int idOrigem, @PathVariable int idDestino) {
+
+        return this.distanciaService.findAllByIdMunicipioOrigemAndIdMunicipioDestino(idOrigem, idDestino);
+    }
+
     @GetMapping("/{id}")
     public DistanciaDTO findById(@PathVariable UUID id) {
         DistanciaDTO distanciaDTO;

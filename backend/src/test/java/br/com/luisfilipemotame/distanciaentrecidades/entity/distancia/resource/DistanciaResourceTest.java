@@ -148,6 +148,31 @@ public class DistanciaResourceTest {
                 .andExpect(jsonPath("$[0].tempoViagemCaminhao", is(8.0)));
     }
 
+    @Test
+    public void testPesquisaTodosDistanciasPorIdMunicipioOrigemEIdMunicipioDestino() throws Exception {
+        DistanciaDTO distanciaDTO = getDistanciaDTO();
+
+        Mockito.when(distanciaService.findAllByIdMunicipioOrigemAndIdMunicipioDestino(1, 1))
+                .thenReturn(Collections.singletonList(distanciaDTO));
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/distancias/1/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].idMunicipioOrigem", is(1)))
+                .andExpect(jsonPath("$[0].idMunicipioDestino", is(2)))
+                .andExpect(jsonPath("$[0].minutos", is(1.0)))
+                .andExpect(jsonPath("$[0].tempoViagem", is(2.0)))
+                .andExpect(jsonPath("$[0].milhas", is(3.0)))
+                .andExpect(jsonPath("$[0].kilometros", is(4.0)))
+                .andExpect(jsonPath("$[0].tempoAt", is(5.0)))
+                .andExpect(jsonPath("$[0].tempoAndando", is(6.0)))
+                .andExpect(jsonPath("$[0].tempoCaminhao", is(7.0)))
+                .andExpect(jsonPath("$[0].tempoViagemCaminhao", is(8.0)));
+    }
+
     private void assertsRequest(ResultActions result, ResultMatcher status, Boolean isContent) throws Exception {
 
         if (isContent) {

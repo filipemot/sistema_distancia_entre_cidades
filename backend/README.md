@@ -153,3 +153,8 @@ spring.datasource.password=postgres
 **Deletar**
 
 **DEL** [http://localhost:8080/api/distancias/{id}](http://localhost:8080/api/distancias/%7Bid%7D)
+
+**Listar Distancias Por Origem e Destino**
+
+**GET** [http://localhost:8080/api/distancias/{idOrigem}/{idDestino}](http://localhost:8080/api/distancias/%7BidOrigem%7D/%7BidDestino%7D)
+  

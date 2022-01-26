@@ -208,6 +208,26 @@ public class DistanciaServiceTest {
         asserts(distanciaDTO, distanciaDTOS.get(0));
     }
 
+    @Test
+    public void testPesquisaTodosDistanciasPorIdMunicipioOrigemEIdMunicipioDestino() {
+        DistanciaDTO distanciaDTO = getDistanciaDTO();
+
+        Distancia distancia = getDistancia();
+
+        Mockito.when(distanciaRepository.findAllByIdMunicipioOrigemAndIdMunicipioDestino(1, 1))
+                .thenReturn(Collections.singletonList(distancia));
+
+        Mockito.when(distanciaMapper.distanciaToDistanciaDto(distancia))
+                .thenReturn(distanciaDTO);
+
+
+        List<DistanciaDTO> distanciaDTOS = distanciaService.findAllByIdMunicipioOrigemAndIdMunicipioDestino(1, 1);
+
+        assertThat(distanciaDTOS).isNotNull();
+        assertThat(distanciaDTOS.size()).isEqualTo(1);
+        asserts(distanciaDTO, distanciaDTOS.get(0));
+    }
+
     private DistanciaDTO getDistanciaDTO() {
         DistanciaDTO distanciaDTO = new DistanciaDTO();
         distanciaDTO.setId(UUID_TEST);

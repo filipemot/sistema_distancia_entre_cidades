@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface DistanciaRepository extends CrudRepository<Distancia, UUID> {
     @Override
     List<Distancia> findAll();
+
+    List<Distancia> findAllByIdMunicipioOrigemAndIdMunicipioDestino(int idMunicipioOrigem, int idMunicipioDestino);
 }
