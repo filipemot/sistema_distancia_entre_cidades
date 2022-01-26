@@ -86,22 +86,22 @@ public class MunicipioServiceTest {
     public void testAtualizarMunicipioDTOComMunicipioDTONaoEncontrado() {
         MunicipioDTO municipioDTO = getMunicipioDTO();
 
-        Municipio Municipio = getMunicipio();
+        Municipio municipio = getMunicipio();
 
         Mockito.when(municipioRepository.findById(UUID_TEST))
                 .thenReturn(Optional.empty());
 
-        Mockito.when(municipioRepository.save(Municipio))
-                .thenReturn(Municipio);
+        Mockito.when(municipioRepository.save(municipio))
+                .thenReturn(municipio);
 
-        Mockito.when(municipioMapper.municipioToMunicipioDto(Municipio))
+        Mockito.when(municipioMapper.municipioToMunicipioDto(municipio))
                 .thenReturn(municipioDTO);
 
         try {
             municipioService.update(UUID_TEST, municipioDTO);
             fail("Falha");
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("Municipio não encontrado");
+            assertThat(e.getMessage()).isEqualTo("municipio não encontrado");
         } catch (Exception e) {
             fail("Falha");
         }
@@ -111,12 +111,12 @@ public class MunicipioServiceTest {
     public void testDeletarMunicipioDTOComMunicipioEncontrado() {
         MunicipioDTO municipioDTO = getMunicipioDTO();
 
-        Municipio Municipio = getMunicipio();
+        Municipio municipio = getMunicipio();
 
         Mockito.when(municipioRepository.findById(UUID_TEST))
-                .thenReturn(Optional.of(Municipio));
+                .thenReturn(Optional.of(municipio));
 
-        Mockito.when(municipioMapper.municipioToMunicipioDto(Municipio))
+        Mockito.when(municipioMapper.municipioToMunicipioDto(municipio))
                 .thenReturn(municipioDTO);
 
         try {
@@ -169,19 +169,19 @@ public class MunicipioServiceTest {
     public void testPesquisaPorIdComMunicipioNaoEncontrado() {
         MunicipioDTO municipioDTO = getMunicipioDTO();
 
-        Municipio Municipio = getMunicipio();
+        Municipio municipio = getMunicipio();
 
         Mockito.when(municipioRepository.findById(UUID_TEST))
                 .thenReturn(Optional.empty());
 
-        Mockito.when(municipioMapper.municipioToMunicipioDto(Municipio))
+        Mockito.when(municipioMapper.municipioToMunicipioDto(municipio))
                 .thenReturn(municipioDTO);
 
         try {
             municipioService.findById(UUID_TEST);
             fail("Falha");
         } catch (NotFoundException e) {
-            assertThat(e.getMessage()).isEqualTo("Municipio não encontrado");
+            assertThat(e.getMessage()).isEqualTo("municipio não encontrado");
         } catch (Exception e) {
             fail("Falha");
         }
@@ -191,12 +191,12 @@ public class MunicipioServiceTest {
     public void testPesquisaTodosMunicipios() {
         MunicipioDTO municipioDTO = getMunicipioDTO();
 
-        Municipio Municipio = getMunicipio();
+        Municipio municipio = getMunicipio();
 
         Mockito.when(municipioRepository.findAll())
-                .thenReturn(Collections.singletonList(Municipio));
+                .thenReturn(Collections.singletonList(municipio));
 
-        Mockito.when(municipioMapper.municipioToMunicipioDto(Municipio))
+        Mockito.when(municipioMapper.municipioToMunicipioDto(municipio))
                 .thenReturn(municipioDTO);
 
 
